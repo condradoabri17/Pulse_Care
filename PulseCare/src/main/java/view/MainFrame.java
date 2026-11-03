@@ -42,23 +42,14 @@ public class MainFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("PulseCare");
-        setResizable(false);
-        setSize(new java.awt.Dimension(900, 650));
+        setSize(new java.awt.Dimension(565, 416));
+        getContentPane().setLayout(new java.awt.CardLayout());
 
+        panelUtama.setPreferredSize(new java.awt.Dimension(565, 416));
         panelUtama.setLayout(new java.awt.CardLayout());
+        getContentPane().add(panelUtama, "card2");
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelUtama, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panelUtama, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-
-        setBounds(0, 0, 914, 658);
+        setBounds(0, 0, 820, 536);
     }// </editor-fold>//GEN-END:initComponents
 public void tampil(String namaHalaman) {
     java.awt.CardLayout cl =

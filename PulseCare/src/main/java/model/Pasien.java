@@ -10,7 +10,6 @@ public class Pasien {
     private String jenisKelamin;
     private String statusBpjs;
     private String alamat;
-    private String noTelepon;
 
     public Pasien() {
     }
@@ -23,7 +22,6 @@ public class Pasien {
         this.jenisKelamin = jenisKelamin;
         this.statusBpjs = statusBpjs;
         this.alamat = alamat;
-        this.noTelepon = noTelepon;
     }
 
     public String getIdPasien() {
@@ -80,13 +78,5 @@ public class Pasien {
 
     public void setAlamat(String alamat) {
         this.alamat = alamat;
-    }
-
-    public String getNoTelepon() {
-        return noTelepon;
-    }
-
-    public void setNoTelepon(String noTelepon) {
-        this.noTelepon = noTelepon;
     }
 }

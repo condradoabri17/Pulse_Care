@@ -7,7 +7,7 @@ public class Petugas {
     private String namaLengkap;
     private LocalDate tanggalLahir;
     private String password;
-    private String statusAkun;
+//    private String statusAkun;
     private String idShift;
 
     public Petugas() {
@@ -18,7 +18,7 @@ public class Petugas {
         this.namaLengkap = namaLengkap;
         this.tanggalLahir = tanggalLahir;
         this.password = password;
-        this.statusAkun = statusAkun;
+//        this.statusAkun = statusAkun;
         this.idShift = idShift;
     }
 
@@ -54,13 +54,13 @@ public class Petugas {
         this.password = password;
     }
 
-    public String getStatusAkun() {
-        return statusAkun;
-    }
-
-    public void setStatusAkun(String statusAkun) {
-        this.statusAkun = statusAkun;
-    }
+//    public String getStatusAkun() {
+//        return statusAkun;
+//    }
+//
+//    public void setStatusAkun(String statusAkun) {
+//        this.statusAkun = statusAkun;
+//    }
 
     public String getIdShift() {
         return idShift;

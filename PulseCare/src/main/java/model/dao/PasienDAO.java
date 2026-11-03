@@ -93,7 +93,6 @@ public class PasienDAO {
             ps.setString(5, pasien.getJenisKelamin());
             ps.setString(6, pasien.getStatusBpjs());
             ps.setString(7, pasien.getAlamat());
-            ps.setString(8, pasien.getNoTelepon());
             return ps.executeUpdate() > 0;
         }
     }
@@ -114,7 +113,6 @@ public class PasienDAO {
             ps.setString(4, pasien.getJenisKelamin());
             ps.setString(5, pasien.getStatusBpjs());
             ps.setString(6, pasien.getAlamat());
-            ps.setString(7, pasien.getNoTelepon());
             ps.setString(8, pasien.getIdPasien());
             return ps.executeUpdate() > 0;
         }

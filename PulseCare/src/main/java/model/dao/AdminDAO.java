@@ -24,19 +24,20 @@ public class AdminDAO {
                 return "petugas";
         }
     }
+
     // Menampilkan daftar akun
     public List<Akun> semua(String kata, String role) throws SQLException {
 
         String sql = "SELECT * FROM ("
                 + "SELECT 'Admin' AS role, nip, nama_lengkap, "
-                + "CONCAT('Username: ', username) AS detail, status_akun "
+                + "CONCAT('Username: ', username) AS detail "
                 + "FROM admin "
                 + "UNION ALL "
-                + "SELECT 'Dokter', nip, nama_lengkap, spesialisasi, status_akun "
+                + "SELECT 'Dokter', nip, nama_lengkap, spesialisasi "
                 + "FROM dokter "
                 + "UNION ALL "
                 + "SELECT 'Petugas', p.nip, p.nama_lengkap, "
-                + "CONCAT('Shift ', s.nama_shift), p.status_akun "
+                + "CONCAT('Shift ', s.nama_shift) "
                 + "FROM petugas p "
                 + "JOIN shift s ON s.id_shift = p.id_shift"
                 + ") AS akun "
@@ -48,6 +49,7 @@ public class AdminDAO {
 
         try (Connection conn = KoneksiDB.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
+
             ps.setString(1, "%" + kata + "%");
             ps.setString(2, "%" + kata + "%");
             ps.setString(3, role);
@@ -60,13 +62,13 @@ public class AdminDAO {
                     akun.setNip(rs.getString("nip"));
                     akun.setNama(rs.getString("nama_lengkap"));
                     akun.setDetail(rs.getString("detail"));
-                    akun.setStatus(rs.getString("status_akun"));
                     hasil.add(akun);
                 }
             }
         }
         return hasil;
     }
+
     // Menghitung jumlah akun
     public int[] hitung() throws SQLException {
 
@@ -89,10 +91,12 @@ public class AdminDAO {
         }
         return jumlah;
     }
+
     // Menambahkan akun baru
     public boolean tambah(String role, String nip, String nama,
             LocalDate tanggalLahir, String extra,
             String refId, String password) throws SQLException {
+
         String sql;
 
         if (role.equals("Admin")) {
@@ -102,6 +106,7 @@ public class AdminDAO {
 
             try (Connection conn = KoneksiDB.getConnection();
                  PreparedStatement ps = conn.prepareStatement(sql)) {
+
                 ps.setString(1, nip);
                 ps.setString(2, nama);
                 ps.setString(3, extra);
@@ -109,6 +114,7 @@ public class AdminDAO {
 
                 return ps.executeUpdate() > 0;
             }
+
         } else if (role.equals("Dokter")) {
             sql = "INSERT INTO dokter "
                     + "(nip, nama_lengkap, tanggal_lahir, spesialisasi, password, id_poli) "
@@ -116,14 +122,17 @@ public class AdminDAO {
 
             try (Connection conn = KoneksiDB.getConnection();
                  PreparedStatement ps = conn.prepareStatement(sql)) {
+
                 ps.setString(1, nip);
                 ps.setString(2, nama);
                 ps.setDate(3, Date.valueOf(tanggalLahir));
                 ps.setString(4, extra);
                 ps.setString(5, password);
                 ps.setString(6, refId);
+
                 return ps.executeUpdate() > 0;
             }
+
         } else {
             sql = "INSERT INTO petugas "
                     + "(nip, nama_lengkap, tanggal_lahir, password, id_shift) "
@@ -131,15 +140,18 @@ public class AdminDAO {
 
             try (Connection conn = KoneksiDB.getConnection();
                  PreparedStatement ps = conn.prepareStatement(sql)) {
+
                 ps.setString(1, nip);
                 ps.setString(2, nama);
                 ps.setDate(3, Date.valueOf(tanggalLahir));
                 ps.setString(4, password);
                 ps.setString(5, refId);
+
                 return ps.executeUpdate() > 0;
             }
         }
     }
+
     // Memeriksa apakah NIP sudah digunakan
     public boolean nipAda(String role, String nip) throws SQLException {
 
@@ -148,6 +160,7 @@ public class AdminDAO {
 
         try (Connection conn = KoneksiDB.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
+
             ps.setString(1, nip);
 
             try (ResultSet rs = ps.executeQuery()) {
@@ -156,6 +169,7 @@ public class AdminDAO {
             }
         }
     }
+
     // Memeriksa apakah username Admin sudah digunakan
     public boolean usernameAdminAda(String username) throws SQLException {
 
@@ -163,6 +177,7 @@ public class AdminDAO {
 
         try (Connection conn = KoneksiDB.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
+
             ps.setString(1, username);
 
             try (ResultSet rs = ps.executeQuery()) {
@@ -171,6 +186,7 @@ public class AdminDAO {
             }
         }
     }
+
     // Mengubah nama dan password akun
     public boolean ubah(String role, String nip, String nama,
             String passBaru) throws SQLException {
@@ -186,27 +202,13 @@ public class AdminDAO {
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             int i = 1;
-
             ps.setString(i++, nama);
 
             if (gantiPass) {
                 ps.setString(i++, passBaru);
             }
+
             ps.setString(i, nip);
-            return ps.executeUpdate() > 0;
-        }
-    }
-    // Mengaktifkan atau menonaktifkan akun
-    public boolean setStatus(String role, String nip,
-            boolean aktif) throws SQLException {
-
-        String sql = "UPDATE " + tabel(role)
-                + " SET status_akun = ? WHERE nip = ?";
-
-        try (Connection conn = KoneksiDB.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, aktif ? "aktif" : "nonaktif");
-            ps.setString(2, nip);
             return ps.executeUpdate() > 0;
         }
     }

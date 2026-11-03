@@ -15,10 +15,12 @@ public class AdminController {
             throws SQLException {
         return adminDAO.semua(kataKunci, role);
     }
+
     // Mengambil jumlah akun berdasarkan role
     public int[] hitungAkun() throws SQLException {
         return adminDAO.hitung();
     }
+
     // Menambahkan akun baru
     public boolean tambah(
             String role,
@@ -34,7 +36,7 @@ public class AdminController {
                 || password == null || password.isEmpty()) {
             return false;
         }
-        
+
         if (adminDAO.nipAda(role, nip.trim())) {
             return false;
         }
@@ -45,10 +47,11 @@ public class AdminController {
         }
 
         return adminDAO.tambah(
-            role, nip.trim(), nama.trim(),
-            tanggalLahir, extra, refId, password
+                role, nip.trim(), nama.trim(),
+                tanggalLahir, extra, refId, password
         );
     }
+
     // Mengubah data akun
     public boolean ubah(
             String role,
@@ -62,14 +65,7 @@ public class AdminController {
         }
 
         return adminDAO.ubah(
-            role, nip.trim(), nama.trim(), passwordBaru
+                role, nip.trim(), nama.trim(), passwordBaru
         );
-    }
-    // Mengaktifkan atau menonaktifkan akun
-    public boolean ubahStatus(String role, String nip, boolean aktif) throws SQLException {
-        if (role == null || nip == null || nip.trim().isEmpty()) {
-            return false;
-        }
-        return adminDAO.setStatus(role, nip.trim(), aktif);
     }
 }

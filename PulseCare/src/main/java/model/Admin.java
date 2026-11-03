@@ -5,7 +5,6 @@ public class Admin {
     private String namaLengkap;
     private String username;
     private String password;
-    private String statusAkun;
 
     public Admin() {
     }
@@ -15,7 +14,6 @@ public class Admin {
         this.namaLengkap = namaLengkap;
         this.username = username;
         this.password = password;
-        this.statusAkun = statusAkun;
     }
 
     public String getNip() {
@@ -48,13 +46,5 @@ public class Admin {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getStatusAkun() {
-        return statusAkun;
-    }
-
-    public void setStatusAkun(String statusAkun) {
-        this.statusAkun = statusAkun;
     }
 }

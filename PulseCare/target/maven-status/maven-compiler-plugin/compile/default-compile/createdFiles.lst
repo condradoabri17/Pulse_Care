@@ -1,4 +1,3 @@
-view\lblGambar.class
 config\TestKoneksiDB.class
 model\Petugas.class
 view\MenuUtama.class
@@ -14,10 +13,13 @@ controller\PasienController.class
 view\DashboardAdmin.class
 model\Dokter.class
 model\Shift.class
+view\DashboardAdmin$2.class
 controller\AdminController.class
 controller\PemeriksaanController.class
 dao\LoginDAO.class
+view\DashboardAdmin$1.class
 model\HasilKunjungan.class
+view\Login$1.class
 view\DashboardDokter.class
 view\FormPemeriksaan.class
 view\MainFrame.class
@@ -25,6 +27,7 @@ dao\PasienDAO.class
 view\KelolaPasien.class
 model\Poliklinik.class
 model\Akun.class
+view\DashboardAdmin$3.class
 view\Login.class
 view\DashboardPetugas.class
 dao\KunjunganDAO.class

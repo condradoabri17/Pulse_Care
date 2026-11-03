@@ -8,7 +8,7 @@ public class Dokter {
     private LocalDate tanggalLahir;
     private String spesialisasi;
     private String password;
-    private String statusAkun;
+//    private String statusAkun;
     private String idPoli;
 
     public Dokter() {
@@ -19,7 +19,7 @@ public class Dokter {
         this.tanggalLahir = tanggalLahir;
         this.spesialisasi = spesialisasi;
         this.password = password;
-        this.statusAkun = statusAkun;
+//        this.statusAkun = statusAkun;
         this.idPoli = idPoli;
     }
 
@@ -63,13 +63,13 @@ public class Dokter {
         this.password = password;
     }
 
-    public String getStatusAkun() {
-        return statusAkun;
-    }
-
-    public void setStatusAkun(String statusAkun) {
-        this.statusAkun = statusAkun;
-    }
+//    public String getStatusAkun() {
+//        return statusAkun;
+//    }
+//
+//    public void setStatusAkun(String statusAkun) {
+//        this.statusAkun = statusAkun;
+//    }
 
     public String getIdPoli() {
         return idPoli;
