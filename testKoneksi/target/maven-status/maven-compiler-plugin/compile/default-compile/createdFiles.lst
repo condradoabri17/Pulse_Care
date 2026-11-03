@@ -1,0 +1,5 @@
+model\dao\BukuDAO.class
+com\mycompany\testkoneksi\main.class
+model\Buku.class
+com\mycompany\testkoneksi\Koneksi.class
+com\mycompany\testkoneksi\TestKoneksi.class
