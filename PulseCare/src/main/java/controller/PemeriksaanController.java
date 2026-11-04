@@ -15,6 +15,10 @@ public class PemeriksaanController {
         }
         return hasilDAO.berdasarkanKunjungan(idKunjungan.trim());
     }
+    // Mengambil seluruh hasil pemeriksaan
+    public java.util.List<HasilKunjungan> semua() throws SQLException {
+        return hasilDAO.semua();
+    }
     // Menyimpan hasil pemeriksaan baru
     public boolean tambah(HasilKunjungan hasil) throws SQLException {
         if (!dataValid(hasil)) {

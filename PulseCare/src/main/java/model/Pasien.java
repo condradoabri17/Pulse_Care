@@ -14,10 +14,13 @@ public class Pasien {
     public Pasien() {
     }
 
-    public Pasien(String idPasien, String nik, String namaLengkap, LocalDate tanggalLahir, String jenisKelamin, String statusBpjs, String alamat, String noTelepon) {
+    public Pasien(String idPasien, String namaLengkap, String nik,
+            LocalDate tanggalLahir, String jenisKelamin,
+            String statusBpjs, String alamat) {
+
         this.idPasien = idPasien;
-        this.nik = nik;
         this.namaLengkap = namaLengkap;
+        this.nik = nik;
         this.tanggalLahir = tanggalLahir;
         this.jenisKelamin = jenisKelamin;
         this.statusBpjs = statusBpjs;

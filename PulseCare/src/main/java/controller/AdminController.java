@@ -59,11 +59,9 @@ public class AdminController {
             String nama,
             String passwordBaru) throws SQLException {
 
-        if (role == null || nip == null || nip.trim().isEmpty()
-                || nama == null || nama.trim().isEmpty()) {
+        if (role == null || nip == null || nip.trim().isEmpty() || nama == null || nama.trim().isEmpty()) {
             return false;
         }
-
         return adminDAO.ubah(
                 role, nip.trim(), nama.trim(), passwordBaru
         );

@@ -1,3 +1,4 @@
+
 package dao;
 
 import config.KoneksiDB;
@@ -23,22 +24,14 @@ public class PasienDAO {
              ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
-                Pasien pasien = new Pasien(
-                    rs.getString("id_pasien"),
-                    rs.getString("nama_lengkap"),
-                    rs.getString("nik"),
-                    rs.getDate("tanggal_lahir").toLocalDate(),
-                    rs.getString("jenis_kelamin"),
-                    rs.getString("status_bpjs"),
-                    rs.getString("alamat"),
-                    rs.getString("no_telepon")
-                );
-
+                Pasien pasien = ambilData(rs);
                 daftar.add(pasien);
             }
         }
+
         return daftar;
     }
+
     // Mencari pasien berdasarkan ID, nama, atau NIK
     public List<Pasien> cari(String kataKunci) throws SQLException {
         List<Pasien> daftar = new ArrayList<>();
@@ -60,28 +53,21 @@ public class PasienDAO {
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    Pasien pasien = new Pasien(
-                        rs.getString("id_pasien"),
-                        rs.getString("nama_lengkap"),
-                        rs.getString("nik"),
-                        rs.getDate("tanggal_lahir").toLocalDate(),
-                        rs.getString("jenis_kelamin"),
-                        rs.getString("status_bpjs"),
-                        rs.getString("alamat"),
-                        rs.getString("no_telepon")
-                    );
+                    Pasien pasien = ambilData(rs);
                     daftar.add(pasien);
                 }
             }
         }
+
         return daftar;
     }
+
     // Menambahkan data pasien
     public boolean tambah(Pasien pasien) throws SQLException {
         String sql = "INSERT INTO pasien "
                    + "(id_pasien, nama_lengkap, nik, tanggal_lahir, "
-                   + "jenis_kelamin, status_bpjs, alamat, no_telepon) "
-                   + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                   + "jenis_kelamin, status_bpjs, alamat) "
+                   + "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = KoneksiDB.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -93,15 +79,16 @@ public class PasienDAO {
             ps.setString(5, pasien.getJenisKelamin());
             ps.setString(6, pasien.getStatusBpjs());
             ps.setString(7, pasien.getAlamat());
+
             return ps.executeUpdate() > 0;
         }
     }
+
     // Mengubah data pasien
     public boolean ubah(Pasien pasien) throws SQLException {
         String sql = "UPDATE pasien SET "
                    + "nama_lengkap = ?, nik = ?, tanggal_lahir = ?, "
-                   + "jenis_kelamin = ?, status_bpjs = ?, "
-                   + "alamat = ?, no_telepon = ? "
+                   + "jenis_kelamin = ?, status_bpjs = ?, alamat = ? "
                    + "WHERE id_pasien = ?";
 
         try (Connection conn = KoneksiDB.getConnection();
@@ -113,8 +100,22 @@ public class PasienDAO {
             ps.setString(4, pasien.getJenisKelamin());
             ps.setString(5, pasien.getStatusBpjs());
             ps.setString(6, pasien.getAlamat());
-            ps.setString(8, pasien.getIdPasien());
+            ps.setString(7, pasien.getIdPasien());
+
             return ps.executeUpdate() > 0;
         }
+    }
+
+    // Mengubah hasil query menjadi objek Pasien
+    private Pasien ambilData(ResultSet rs) throws SQLException {
+        return new Pasien(
+            rs.getString("id_pasien"),
+            rs.getString("nama_lengkap"),
+            rs.getString("nik"),
+            rs.getDate("tanggal_lahir").toLocalDate(),
+            rs.getString("jenis_kelamin"),
+            rs.getString("status_bpjs"),
+            rs.getString("alamat")
+        );
     }
 }
