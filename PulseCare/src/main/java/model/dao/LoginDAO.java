@@ -16,7 +16,8 @@ public class LoginDAO {
             // 1. Memeriksa akun Admin
             String sqlAdmin = "SELECT nip, nama_lengkap, username "
                     + "FROM admin "
-                    + "WHERE username = ? AND password = ?";
+                    + "WHERE username = ? AND password = ? "
+                    + "AND status_akun = 'Aktif'";
 
             try (PreparedStatement ps = conn.prepareStatement(sqlAdmin)) {
                 ps.setString(1, id);
@@ -30,7 +31,7 @@ public class LoginDAO {
                                 rs.getString("nama_lengkap")
                         );
 
-                        akun.setDetail("username: " + rs.getString("username"));
+                        akun.setDetail(rs.getString("username"));
                         return akun;
                     }
                 }
@@ -40,7 +41,8 @@ public class LoginDAO {
             String sqlPetugas = "SELECT p.nip, p.nama_lengkap, s.nama_shift "
                     + "FROM petugas p "
                     + "JOIN shift s ON s.id_shift = p.id_shift "
-                    + "WHERE p.nip = ? AND p.password = ?";
+                    + "WHERE p.nip = ? AND p.password = ? "
+                    + "AND p.status_akun = 'Aktif'";
 
             try (PreparedStatement ps = conn.prepareStatement(sqlPetugas)) {
                 ps.setString(1, id);
@@ -61,11 +63,10 @@ public class LoginDAO {
             }
 
             // 3. Memeriksa akun Dokter
-            String sqlDokter = "SELECT d.nip, d.nama_lengkap, d.spesialisasi, "
-                    + "d.id_poli, po.nama_poli "
-                    + "FROM dokter d "
-                    + "LEFT JOIN poliklinik po ON po.id_poli = d.id_poli "
-                    + "WHERE d.nip = ? AND d.password = ?";
+            String sqlDokter = "SELECT nip, nama_lengkap, spesialisasi "
+                    + "FROM dokter "
+                    + "WHERE nip = ? AND password = ? "
+                    + "AND status_akun = 'Aktif'";
 
             try (PreparedStatement ps = conn.prepareStatement(sqlDokter)) {
                 ps.setString(1, id);
@@ -79,14 +80,7 @@ public class LoginDAO {
                                 rs.getString("nama_lengkap")
                         );
 
-                        akun.setIdPoli(rs.getString("id_poli"));
-                        akun.setNamaPoli(rs.getString("nama_poli"));
-
-                        String namaPoli = akun.getNamaPoli();
-
-                        akun.setDetail(namaPoli != null
-                                ? namaPoli
-                                : rs.getString("spesialisasi"));
+                        akun.setDetail(rs.getString("spesialisasi"));
 
                         return akun;
                     }

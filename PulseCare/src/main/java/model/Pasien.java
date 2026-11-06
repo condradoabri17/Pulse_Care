@@ -9,14 +9,13 @@ public class Pasien {
     private LocalDate tanggalLahir;
     private String jenisKelamin;
     private String statusBpjs;
-    private String alamat;
 
     public Pasien() {
     }
 
     public Pasien(String idPasien, String namaLengkap, String nik,
             LocalDate tanggalLahir, String jenisKelamin,
-            String statusBpjs, String alamat) {
+            String statusBpjs) {
 
         this.idPasien = idPasien;
         this.namaLengkap = namaLengkap;
@@ -24,7 +23,6 @@ public class Pasien {
         this.tanggalLahir = tanggalLahir;
         this.jenisKelamin = jenisKelamin;
         this.statusBpjs = statusBpjs;
-        this.alamat = alamat;
     }
 
     public String getIdPasien() {
@@ -73,13 +71,5 @@ public class Pasien {
 
     public void setStatusBpjs(String statusBpjs) {
         this.statusBpjs = statusBpjs;
-    }
-
-    public String getAlamat() {
-        return alamat;
-    }
-
-    public void setAlamat(String alamat) {
-        this.alamat = alamat;
     }
 }

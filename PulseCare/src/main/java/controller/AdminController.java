@@ -41,14 +41,26 @@ public class AdminController {
             return false;
         }
 
-        if ("Admin".equalsIgnoreCase(role)
-                && adminDAO.usernameAdminAda(extra)) {
-            return false;
+        if ("Dokter".equals(role)) {
+            if (tanggalLahir == null || extra == null || extra.trim().isEmpty()) {
+                return false;
+            }
+        }
+
+        if ("Petugas".equals(role)) {
+            if (tanggalLahir == null || refId == null || refId.trim().isEmpty()) {
+                return false;
+            }
         }
 
         return adminDAO.tambah(
-                role, nip.trim(), nama.trim(),
-                tanggalLahir, extra, refId, password
+                role,
+                nip.trim(),
+                nama.trim(),
+                tanggalLahir,
+                extra,
+                refId,
+                password
         );
     }
 
@@ -57,13 +69,31 @@ public class AdminController {
             String role,
             String nip,
             String nama,
-            String passwordBaru) throws SQLException {
+            String passwordBaru,
+            String refId) throws SQLException {
 
-        if (role == null || nip == null || nip.trim().isEmpty() || nama == null || nama.trim().isEmpty()) {
+        if (role == null || nip == null || nip.trim().isEmpty()
+                || nama == null || nama.trim().isEmpty()) {
             return false;
         }
+
+        if ("Petugas".equals(role)
+                && (refId == null || refId.trim().isEmpty())) {
+            return false;
+        }
+
         return adminDAO.ubah(
-                role, nip.trim(), nama.trim(), passwordBaru
+                role,
+                nip.trim(),
+                nama.trim(),
+                passwordBaru,
+                refId
         );
+    }
+    // Mengubah status akun
+    public boolean ubahStatus(String role, String nip,
+            String statusBaru) throws SQLException {
+
+        return adminDAO.ubahStatus(role, nip, statusBaru);
     }
 }

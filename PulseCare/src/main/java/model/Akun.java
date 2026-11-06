@@ -1,6 +1,7 @@
 package model;
 
 public class Akun {
+
     private String role;
     private String nip;
     private String nama;
@@ -69,6 +70,6 @@ public class Akun {
     }
 
     public boolean aktif() {
-        return "aktif".equals(status);
+        return "Aktif".equalsIgnoreCase(status);
     }
 }

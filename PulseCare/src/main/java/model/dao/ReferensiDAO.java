@@ -54,14 +54,13 @@ public class ReferensiDAO {
         return daftar;
     }
 
-    // Mengambil data dokter beserta nama polikliniknya
-    public List<Object[]> dokterPerPoliklinik() throws SQLException {
+    // Mengambil nama dan spesialisasi dokter
+    public List<Object[]> dokterDanSpesialisasi() throws SQLException {
         List<Object[]> daftar = new ArrayList<>();
 
-        String sql = "SELECT d.nama_lengkap, p.nama_poli "
-                   + "FROM dokter d "
-                   + "LEFT JOIN poliklinik p ON d.id_poli = p.id_poli "
-                   + "ORDER BY d.nama_lengkap";
+        String sql = "SELECT nama_lengkap, spesialisasi "
+                   + "FROM dokter "
+                   + "ORDER BY nama_lengkap";
 
         try (Connection conn = KoneksiDB.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
@@ -70,7 +69,7 @@ public class ReferensiDAO {
             while (rs.next()) {
                 daftar.add(new Object[]{
                     rs.getString("nama_lengkap"),
-                    rs.getString("nama_poli")
+                    rs.getString("spesialisasi")
                 });
             }
         }
@@ -103,5 +102,24 @@ public class ReferensiDAO {
             }
         }
         return daftar;
+    }
+    // Mengambil ID shift berdasarkan NIP petugas
+    public String shiftPetugas(String nip) throws SQLException {
+
+        String sql = "SELECT id_shift FROM petugas WHERE nip = ?";
+
+        try (Connection conn = KoneksiDB.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, nip);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("id_shift");
+                }
+            }
+        }
+
+        return null;
     }
 }

@@ -4,17 +4,144 @@
  */
 package view;
 
+import model.Akun;
+import dao.KunjunganDAO;
+import java.util.List;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+import javax.swing.JOptionPane;
+import javax.swing.Timer;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Lenovo
  */
 public class DashboardDokter extends javax.swing.JPanel {
 
-    /**
-     * Creates new form DashboardDokter
-     */
+    private Akun akunLogin;
+    private Timer timerDashboard;
+
     public DashboardDokter() {
         initComponents();
+        aturTabelAntrean();
+    }
+
+    public DashboardDokter(Akun akun) {
+        this();
+        this.akunLogin = akun;
+
+        namaPengguna.setText(akun.getNama());
+        usernamePengguna.setText(akun.getNip());
+
+        aturTanggalDanPoli();
+        muatStatistik();
+        muatPasienSedangDiperiksa();
+        muatAntrean();
+
+        timerDashboard = new Timer(5000, e -> {
+            muatStatistik();
+            muatPasienSedangDiperiksa();
+            muatAntrean();
+        });
+
+        timerDashboard.start();
+    }
+
+    /**
+     * Creates new form DashboardDokter
+     */  
+    
+    private void aturTabelAntrean() {
+    DefaultTableModel model = new DefaultTableModel(
+        new Object[]{
+            "No. Antrean",
+            "Nama Pasien",
+            "Status"
+        }, 0
+    ) {
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false;
+        }
+    };
+
+    jTable2.setModel(model);
+}
+
+    private void muatAntrean() {
+        DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
+        model.setRowCount(0);
+
+        try {
+            KunjunganDAO dao = new KunjunganDAO();
+
+            List<Object[]> daftar = dao.antreanDokterHariIni(
+                    akunLogin.getIdPoli()
+            );
+
+            for (Object[] data : daftar) {
+                model.addRow(data);
+            }
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Gagal memuat antrean: " + e.getMessage()
+            );
+        }
+    }
+
+    private void muatPasienSedangDiperiksa() {
+        KunjunganDAO dao = new KunjunganDAO();
+
+        try {
+            Object[] pasien = dao.pasienSedangDiperiksa(
+                    akunLogin.getIdPoli()
+            );
+
+            if (pasien != null) {
+                String nomorAntrean = pasien[0].toString();
+                String namaPasien = pasien[1].toString();
+                String idPasien = pasien[2].toString();
+                String jenisKelamin = pasien[3].toString();
+                String statusBpjs = pasien[4].toString();
+
+                jenisKelamin = jenisKelamin.substring(0, 1).toUpperCase()
+                        + jenisKelamin.substring(1);
+
+                statusBpjs = statusBpjs.equalsIgnoreCase("aktif")
+                        ? "Aktif" : "Tidak Aktif";
+
+                lblStatusPemeriksaan.setText("Sedang diperiksa");
+                lblNamaPasien.setText(namaPasien);
+
+                jLabel26.setText(
+                        "Antrean " + nomorAntrean
+                        + " - " + idPasien
+                        + " - " + jenisKelamin
+                        + " - BPJS " + statusBpjs
+                );
+
+            } else {
+                lblStatusPemeriksaan.setText("Belum ada pasien diperiksa");
+                lblNamaPasien.setText("-");
+                jLabel26.setText("Tidak ada pasien yang sedang diperiksa");
+            }
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Gagal memuat data pasien: " + e.getMessage()
+            );
+        }
+    }
+
+    public void setInfoPengguna(String nama, String nip) {
+        namaPengguna.setText(nama);
+        usernamePengguna.setText(nip);
     }
 
     /**
@@ -26,19 +153,605 @@ public class DashboardDokter extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        lblPoliklinik = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        lblPasienHariIni = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jPanel6 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        btnDashboardDokter = new javax.swing.JButton();
+        jPanel9 = new javax.swing.JPanel();
+        jLabel9 = new javax.swing.JLabel();
+        btnAntreanDokter = new javax.swing.JButton();
+        btnPerbaruiStatus = new javax.swing.JButton();
+        btnRiwayatKunjungan = new javax.swing.JButton();
+        namaPengguna = new javax.swing.JLabel();
+        usernamePengguna = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        jPanel7 = new javax.swing.JPanel();
+        jPanel8 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable();
+        jLabel23 = new javax.swing.JLabel();
+        jPanel12 = new javax.swing.JPanel();
+        lblStatusPemeriksaan = new javax.swing.JLabel();
+        jLabel24 = new javax.swing.JLabel();
+        jLabel26 = new javax.swing.JLabel();
+        lblNamaPasien = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jPanel5 = new javax.swing.JPanel();
+        lblStatusMenunggu = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jPanel10 = new javax.swing.JPanel();
+        lblStatusDiperiksa = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        jPanel13 = new javax.swing.JPanel();
+        lblStatusSelesai = new javax.swing.JLabel();
+        jLabel25 = new javax.swing.JLabel();
+        lblTanggalPemeriksaan1 = new javax.swing.JLabel();
+
+        jPanel1.setBackground(new java.awt.Color(244, 247, 248));
+        jPanel1.setPreferredSize(new java.awt.Dimension(806, 550));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(22, 63, 76));
+        jLabel2.setText("Dashboard Dokter");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 20, -1, -1));
+
+        lblPoliklinik.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblPoliklinik.setForeground(new java.awt.Color(100, 127, 140));
+        lblPoliklinik.setText("Poliklinik");
+        jPanel1.add(lblPoliklinik, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 60, -1, -1));
+
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(186, 234, 242)));
+        jPanel3.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+
+        lblPasienHariIni.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblPasienHariIni.setForeground(new java.awt.Color(102, 102, 102));
+        lblPasienHariIni.setText("Pasien Hari Ini");
+
+        jLabel11.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel11.setText("4");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblPasienHariIni)
+                    .addComponent(jLabel11))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblPasienHariIni)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel11)
+                .addContainerGap())
+        );
+
+        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 100, 120, -1));
+
+        jPanel6.setBackground(new java.awt.Color(11, 59, 68));
+        jPanel6.setPreferredSize(new java.awt.Dimension(175, 401));
+
+        jButton1.setBackground(new java.awt.Color(229, 57, 53));
+        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(255, 255, 255));
+        jButton1.setText("Keluar");
+        jButton1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 2));
+        jButton1.addActionListener(this::jButton1ActionPerformed);
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("PulseCare");
+
+        btnDashboardDokter.setBackground(new java.awt.Color(186, 234, 242));
+        btnDashboardDokter.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnDashboardDokter.setForeground(new java.awt.Color(20, 96, 108));
+        btnDashboardDokter.setText("Dashboard");
+        btnDashboardDokter.setBorder(null);
+        btnDashboardDokter.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        btnDashboardDokter.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnDashboardDokterMouseClicked(evt);
+            }
+        });
+        btnDashboardDokter.addActionListener(this::btnDashboardDokterActionPerformed);
+
+        jPanel9.setBackground(new java.awt.Color(20, 96, 108));
+        jPanel9.setPreferredSize(new java.awt.Dimension(0, 2));
+
+        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 8, Short.MAX_VALUE)
+        );
+
+        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Logo PulseCare sedang tanpa tulisan.png"))); // NOI18N
+
+        btnAntreanDokter.setBackground(new java.awt.Color(20, 96, 108));
+        btnAntreanDokter.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnAntreanDokter.setForeground(new java.awt.Color(255, 255, 255));
+        btnAntreanDokter.setText("Antrean Dokter");
+        btnAntreanDokter.setBorder(null);
+        btnAntreanDokter.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        btnAntreanDokter.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnAntreanDokterMouseClicked(evt);
+            }
+        });
+        btnAntreanDokter.addActionListener(this::btnAntreanDokterActionPerformed);
+
+        btnPerbaruiStatus.setBackground(new java.awt.Color(20, 96, 108));
+        btnPerbaruiStatus.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnPerbaruiStatus.setForeground(new java.awt.Color(255, 255, 255));
+        btnPerbaruiStatus.setText("Perbarui Status");
+        btnPerbaruiStatus.setBorder(null);
+        btnPerbaruiStatus.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        btnPerbaruiStatus.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnPerbaruiStatusMouseClicked(evt);
+            }
+        });
+        btnPerbaruiStatus.addActionListener(this::btnPerbaruiStatusActionPerformed);
+
+        btnRiwayatKunjungan.setBackground(new java.awt.Color(20, 96, 108));
+        btnRiwayatKunjungan.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnRiwayatKunjungan.setForeground(new java.awt.Color(255, 255, 255));
+        btnRiwayatKunjungan.setText("Riwayat Kunjungan");
+        btnRiwayatKunjungan.setBorder(null);
+        btnRiwayatKunjungan.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        btnRiwayatKunjungan.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnRiwayatKunjunganMouseClicked(evt);
+            }
+        });
+        btnRiwayatKunjungan.addActionListener(this::btnRiwayatKunjunganActionPerformed);
+
+        namaPengguna.setBackground(new java.awt.Color(255, 255, 255));
+        namaPengguna.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        namaPengguna.setForeground(new java.awt.Color(255, 255, 255));
+        namaPengguna.setText("Nama Lengkap");
+
+        usernamePengguna.setFont(new java.awt.Font("Segoe UI", 0, 10)); // NOI18N
+        usernamePengguna.setForeground(new java.awt.Color(204, 204, 204));
+        usernamePengguna.setText("Username");
+
+        jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pulsecare_profile_icon_50.png"))); // NOI18N
+        jLabel12.setText("jLabel10");
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGap(32, 32, 32)
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel6Layout.createSequentialGroup()
+                                .addGap(14, 14, 14)
+                                .addComponent(jLabel9))
+                            .addComponent(jLabel1)))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGap(16, 16, 16)
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnAntreanDokter, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnDashboardDokter, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnPerbaruiStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnRiwayatKunjungan, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)))
+                    .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel6Layout.createSequentialGroup()
+                            .addGap(61, 61, 61)
+                            .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                            .addGap(43, 43, 43)
+                            .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(usernamePengguna)
+                                .addComponent(namaPengguna)))))
+                .addContainerGap(19, Short.MAX_VALUE))
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addComponent(jLabel9)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
+                .addComponent(btnDashboardDokter, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnAntreanDokter, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnPerbaruiStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnRiwayatKunjungan, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28)
+                .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, 8, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel12)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(namaPengguna)
+                .addGap(4, 4, 4)
+                .addComponent(usernamePengguna)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(36, Short.MAX_VALUE))
+        );
+
+        jPanel1.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 550));
+
+        jPanel7.setBackground(new java.awt.Color(20, 96, 108));
+
+        jPanel8.setBackground(new java.awt.Color(255, 255, 255));
+
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {"", "", ""},
+                {"", "", ""},
+                {"", "", ""},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "", "", ""
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.Object.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jScrollPane3.setViewportView(jTable2);
+
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 516, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jLabel23.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel23.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel23.setText("Antrean berikutnya");
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addGap(11, 11, 11)
+                        .addComponent(jLabel23)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jPanel1.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 300, 540, -1));
+
+        jPanel12.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel12.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(186, 234, 242)));
+        jPanel12.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        jPanel12.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        lblStatusPemeriksaan.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblStatusPemeriksaan.setForeground(new java.awt.Color(102, 102, 102));
+        lblStatusPemeriksaan.setText("Sedang diperiksa");
+        jPanel12.add(lblStatusPemeriksaan, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 0, -1, 30));
+        jPanel12.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(16, 6, -1, 77));
+
+        jLabel26.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel26.setForeground(new java.awt.Color(102, 102, 102));
+        jLabel26.setText("Antrean 003 - PS004 - Perempuan - BPJS Aktif");
+        jLabel26.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jPanel12.add(jLabel26, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 50, 270, 30));
+
+        lblNamaPasien.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
+        lblNamaPasien.setText("Dewi Sartika");
+        jPanel12.add(lblNamaPasien, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 30, -1, 20));
+
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Dokter 70x70.png"))); // NOI18N
+        jPanel12.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, -1, -1));
+
+        jPanel1.add(jPanel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 190, 540, 90));
+
+        jPanel5.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(186, 234, 242)));
+        jPanel5.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        jPanel5.setPreferredSize(new java.awt.Dimension(90, 66));
+
+        lblStatusMenunggu.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblStatusMenunggu.setForeground(new java.awt.Color(102, 102, 102));
+        lblStatusMenunggu.setText("Menunggu");
+
+        jLabel13.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel13.setText("4");
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblStatusMenunggu)
+                    .addComponent(jLabel13))
+                .addContainerGap(50, Short.MAX_VALUE))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblStatusMenunggu)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel13)
+                .addContainerGap())
+        );
+
+        jPanel1.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 100, 120, -1));
+
+        jPanel10.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel10.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(186, 234, 242)));
+        jPanel10.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        jPanel10.setPreferredSize(new java.awt.Dimension(90, 66));
+
+        lblStatusDiperiksa.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblStatusDiperiksa.setForeground(new java.awt.Color(102, 102, 102));
+        lblStatusDiperiksa.setText("Sedang Diperiksa ");
+
+        jLabel16.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel16.setText("4");
+
+        javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
+        jPanel10.setLayout(jPanel10Layout);
+        jPanel10Layout.setHorizontalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel10Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblStatusDiperiksa)
+                    .addComponent(jLabel16))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel10Layout.setVerticalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel10Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblStatusDiperiksa)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel16)
+                .addGap(40, 40, 40))
+        );
+
+        jPanel1.add(jPanel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 100, 120, -1));
+
+        jPanel13.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel13.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(186, 234, 242)));
+        jPanel13.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+
+        lblStatusSelesai.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblStatusSelesai.setForeground(new java.awt.Color(102, 102, 102));
+        lblStatusSelesai.setText("Selesai");
+
+        jLabel25.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel25.setText("4");
+
+        javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
+        jPanel13.setLayout(jPanel13Layout);
+        jPanel13Layout.setHorizontalGroup(
+            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel13Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblStatusSelesai)
+                    .addComponent(jLabel25))
+                .addContainerGap(73, Short.MAX_VALUE))
+        );
+        jPanel13Layout.setVerticalGroup(
+            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel13Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblStatusSelesai)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel25)
+                .addContainerGap())
+        );
+
+        jPanel1.add(jPanel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 100, 120, -1));
+
+        lblTanggalPemeriksaan1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblTanggalPemeriksaan1.setForeground(new java.awt.Color(100, 127, 140));
+        lblTanggalPemeriksaan1.setText("Jumat, 30 Oktober 2026");
+        jPanel1.add(lblTanggalPemeriksaan1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 60, -1, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 815, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 531, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void btnRiwayatKunjunganActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRiwayatKunjunganActionPerformed
+        MainFrame frame = (MainFrame)javax.swing.SwingUtilities.getWindowAncestor(this);
+        frame.tampil("riwayatKunjungan");
+    }//GEN-LAST:event_btnRiwayatKunjunganActionPerformed
+
+    private void btnRiwayatKunjunganMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRiwayatKunjunganMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnRiwayatKunjunganMouseClicked
+
+    private void btnPerbaruiStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPerbaruiStatusActionPerformed
+        MainFrame frame = (MainFrame)javax.swing.SwingUtilities.getWindowAncestor(this);
+        frame.tampil("perbaruiStatus");
+    }//GEN-LAST:event_btnPerbaruiStatusActionPerformed
+
+    private void btnPerbaruiStatusMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPerbaruiStatusMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnPerbaruiStatusMouseClicked
+
+    private void btnAntreanDokterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAntreanDokterActionPerformed
+        MainFrame frame = (MainFrame)javax.swing.SwingUtilities.getWindowAncestor(this);
+        frame.tampil("antreanDokter");
+    }//GEN-LAST:event_btnAntreanDokterActionPerformed
+
+    private void btnAntreanDokterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAntreanDokterMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAntreanDokterMouseClicked
+
+    private void btnDashboardDokterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDashboardDokterActionPerformed
+        MainFrame frame = (MainFrame)
+        javax.swing.SwingUtilities.getWindowAncestor(this);
+
+        frame.tampil("dashboardDokter");
+    }//GEN-LAST:event_btnDashboardDokterActionPerformed
+
+    private void btnDashboardDokterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDashboardDokterMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnDashboardDokterMouseClicked
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        int konfirmasi = javax.swing.JOptionPane.showConfirmDialog(
+            this,
+            "Apakah kamu yakin ingin keluar dari akun?",
+            "Konfirmasi Keluar",
+            javax.swing.JOptionPane.YES_NO_OPTION
+        );
+
+        if (konfirmasi == javax.swing.JOptionPane.YES_OPTION) {
+            MainFrame frame = (MainFrame)
+            javax.swing.SwingUtilities.getWindowAncestor(this);
+
+            frame.tampil("login");
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAntreanDokter;
+    private javax.swing.JButton btnDashboardDokter;
+    private javax.swing.JButton btnPerbaruiStatus;
+    private javax.swing.JButton btnRiwayatKunjungan;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel12;
+    private javax.swing.JPanel jPanel13;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTable jTable2;
+    private javax.swing.JLabel lblNamaPasien;
+    private javax.swing.JLabel lblPasienHariIni;
+    private javax.swing.JLabel lblPoliklinik;
+    private javax.swing.JLabel lblStatusDiperiksa;
+    private javax.swing.JLabel lblStatusMenunggu;
+    private javax.swing.JLabel lblStatusPemeriksaan;
+    private javax.swing.JLabel lblStatusSelesai;
+    private javax.swing.JLabel lblTanggalPemeriksaan1;
+    private javax.swing.JLabel namaPengguna;
+    private javax.swing.JLabel usernamePengguna;
     // End of variables declaration//GEN-END:variables
+
+
+private void aturTanggalDanPoli() {
+    LocalDate tanggal = LocalDate.now();
+
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
+            "EEEE, dd MMMM yyyy",
+            new Locale("id", "ID")
+    );
+
+    lblTanggalPemeriksaan1.setText(tanggal.format(formatter));
+    lblPoliklinik.setText(akunLogin.getNamaPoli());
+}
+
+    private void muatStatistik() {
+        KunjunganDAO dao = new KunjunganDAO();
+
+        try {
+            int[] statistik = dao.statistikDokterHariIni(
+                    akunLogin.getIdPoli()
+            );
+
+            jLabel11.setText(String.valueOf(statistik[0]));
+            jLabel13.setText(String.valueOf(statistik[1]));
+            jLabel16.setText(String.valueOf(statistik[2]));
+            jLabel25.setText(String.valueOf(statistik[3]));
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Gagal memuat statistik: " + e.getMessage()
+            );
+        }
+    }
 }

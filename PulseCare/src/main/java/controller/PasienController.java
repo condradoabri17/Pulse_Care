@@ -8,7 +8,10 @@ import java.util.List;
 public class PasienController {
 
     private final PasienDAO pasienDAO = new PasienDAO();
-
+   
+    public String idBerikutnya() throws SQLException {
+        return pasienDAO.idBerikutnya();
+    }
     // Mengambil seluruh data pasien
     public List<Pasien> semua() throws SQLException {
         return pasienDAO.semua();

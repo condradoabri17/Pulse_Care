@@ -4,6 +4,8 @@
  */
 package view;
 
+import java.awt.CardLayout;
+import model.Akun;
 /**
  *
  * @author Lenovo
@@ -11,24 +13,122 @@ package view;
 public class MainFrame extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MainFrame.class.getName());
-
+    private DashboardAdmin dashboardAdmin;
+    private DashboardPetugas dashboardPetugas;
+    private DashboardDokter dashboardDokter;
+    private RiwayatKunjungan riwayatKunjungan;
+    private AntreanDokter antreanDokter;
+    private KelolaAkun kelolaAkun;
+    private Akun akunPetugasAktif;
+    private Akun akunDokterAktif;
+    private final DaftarkanKunjungan daftarkanKunjungan;
+    
+    
+    
     /**
      * Creates new form MainFrame
      */
     public MainFrame() {
         initComponents();
+        
+        setResizable(true);
+        
         panelUtama.add(new MenuUtama(), "menu");
         panelUtama.add(new Login(), "login");
+        panelUtama.add(new KelolaAkun(), "kelolaAkun");
 
-        java.awt.CardLayout cl =
-                (java.awt.CardLayout) panelUtama.getLayout();
+        antreanDokter = new AntreanDokter();
+        panelUtama.add(antreanDokter, "antreanDokter");        
+        panelUtama.add(new RiwayatKunjungan(), "riwayatKunjungan");
+        
+        panelUtama.add(new KelolaPasien(), "kelolaPasien");
+        
+        daftarkanKunjungan = new DaftarkanKunjungan();
+        panelUtama.add(daftarkanKunjungan, "daftarkanKunjungan");
+        
+        panelUtama.add(new PerbaruiStatus(), "perbaruiStatus");
+
+        CardLayout cl = (CardLayout) panelUtama.getLayout();
 
         cl.show(panelUtama, "menu");
 
         setLocationRelativeTo(null);
-            }
-
+    }
     
+    public void tampilkanDashboardAdmin(Akun akun) {
+        if (dashboardAdmin != null) {
+            panelUtama.remove(dashboardAdmin);
+        }
+
+        dashboardAdmin = new DashboardAdmin(akun);
+        panelUtama.add(dashboardAdmin, "dashboardAdmin");
+
+        java.awt.CardLayout cl =
+            (java.awt.CardLayout) panelUtama.getLayout();
+
+        cl.show(panelUtama, "dashboardAdmin");
+
+        panelUtama.revalidate();
+        panelUtama.repaint();
+    }
+    public void tampilkanDashboardPetugas(Akun akun) {
+        akunPetugasAktif = akun;
+        
+        if (dashboardPetugas != null) {
+            panelUtama.remove(dashboardPetugas);
+        }
+
+        dashboardPetugas = new DashboardPetugas();
+
+        dashboardPetugas.setInfoPengguna(
+            akun.getNama(),
+            akun.getNip()
+        );
+
+        panelUtama.add(dashboardPetugas, "dashboardPetugas");
+
+        CardLayout cl = (CardLayout) panelUtama.getLayout();
+        cl.show(panelUtama, "dashboardPetugas");
+
+        panelUtama.revalidate();
+        panelUtama.repaint();
+    }
+        public Akun getAkunPetugasAktif() {
+        return akunPetugasAktif;
+    }    
+        
+    public void tampilkanDaftarkanKunjungan() {
+        if (akunPetugasAktif == null) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Silakan login sebagai petugas terlebih dahulu!");
+            return;
+        }
+
+        daftarkanKunjungan.setInfoPetugas(akunPetugasAktif.getNip());
+
+        tampil("daftarkanKunjungan");
+    }
+    public void tampilkanDashboardDokter(Akun akun) {
+        if (dashboardDokter != null) {
+            panelUtama.remove(dashboardDokter);
+        }
+
+        dashboardDokter = new DashboardDokter(akun);
+        dashboardDokter.setInfoPengguna(
+            akun.getNama(),
+            akun.getNip()
+        );
+        panelUtama.add(dashboardDokter, "dashboardDokter");
+
+        CardLayout cl = (CardLayout) panelUtama.getLayout();
+        cl.show(panelUtama, "dashboardDokter");
+
+        panelUtama.revalidate();
+        panelUtama.repaint();
+        akunDokterAktif = akun;
+        antreanDokter.setAkunDokter(akun);
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -49,40 +149,35 @@ public class MainFrame extends javax.swing.JFrame {
         panelUtama.setLayout(new java.awt.CardLayout());
         getContentPane().add(panelUtama, "card2");
 
-        setBounds(0, 0, 820, 536);
+        setBounds(0, 0, 820, 558);
     }// </editor-fold>//GEN-END:initComponents
-public void tampil(String namaHalaman) {
-    java.awt.CardLayout cl =
-            (java.awt.CardLayout) panelUtama.getLayout();
+    public void tampil(String namaHalaman) {
+        java.awt.CardLayout cl =
+                (java.awt.CardLayout) panelUtama.getLayout();
 
-    cl.show(panelUtama, namaHalaman);
+        cl.show(panelUtama, namaHalaman);
 }
     /**
      * @param args the command line arguments
      */
-public static void main(String args[]) {
-    java.awt.EventQueue.invokeLater(() -> {
-        new MainFrame().setVisible(true);
-    });
-      /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+            for (javax.swing.UIManager.LookAndFeelInfo info : 
+                    javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
             }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ReflectiveOperationException | 
+                 javax.swing.UnsupportedLookAndFeelException ex) {
             logger.log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new MainFrame().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> {
+            new MainFrame().setVisible(true);
+        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

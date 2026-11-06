@@ -1,4 +1,3 @@
-
 package dao;
 
 import config.KoneksiDB;
@@ -66,8 +65,8 @@ public class PasienDAO {
     public boolean tambah(Pasien pasien) throws SQLException {
         String sql = "INSERT INTO pasien "
                    + "(id_pasien, nama_lengkap, nik, tanggal_lahir, "
-                   + "jenis_kelamin, status_bpjs, alamat) "
-                   + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+                   + "jenis_kelamin, status_bpjs) "
+                   + "VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = KoneksiDB.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -78,7 +77,6 @@ public class PasienDAO {
             ps.setDate(4, Date.valueOf(pasien.getTanggalLahir()));
             ps.setString(5, pasien.getJenisKelamin());
             ps.setString(6, pasien.getStatusBpjs());
-            ps.setString(7, pasien.getAlamat());
 
             return ps.executeUpdate() > 0;
         }
@@ -88,7 +86,7 @@ public class PasienDAO {
     public boolean ubah(Pasien pasien) throws SQLException {
         String sql = "UPDATE pasien SET "
                    + "nama_lengkap = ?, nik = ?, tanggal_lahir = ?, "
-                   + "jenis_kelamin = ?, status_bpjs = ?, alamat = ? "
+                   + "jenis_kelamin = ?, status_bpjs = ?"
                    + "WHERE id_pasien = ?";
 
         try (Connection conn = KoneksiDB.getConnection();
@@ -99,8 +97,7 @@ public class PasienDAO {
             ps.setDate(3, Date.valueOf(pasien.getTanggalLahir()));
             ps.setString(4, pasien.getJenisKelamin());
             ps.setString(5, pasien.getStatusBpjs());
-            ps.setString(6, pasien.getAlamat());
-            ps.setString(7, pasien.getIdPasien());
+            ps.setString(6, pasien.getIdPasien());
 
             return ps.executeUpdate() > 0;
         }
@@ -114,8 +111,36 @@ public class PasienDAO {
             rs.getString("nik"),
             rs.getDate("tanggal_lahir").toLocalDate(),
             rs.getString("jenis_kelamin"),
-            rs.getString("status_bpjs"),
-            rs.getString("alamat")
+            rs.getString("status_bpjs")
         );
+    }
+    // Membuat ID pasien berikutnya
+    public String idBerikutnya() throws SQLException {
+        String sql = "SELECT MAX(CAST(SUBSTRING(id_pasien, 3) "
+                   + "AS UNSIGNED)) AS nomor FROM pasien";
+
+        try (Connection conn = KoneksiDB.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            if (rs.next()) {
+                int nomor = rs.getInt("nomor") + 1;
+                return String.format("PS%03d", nomor);
+            }
+        }
+
+        return "PS001";
+    }
+    // Menghapus data pasien
+    public boolean hapus(String idPasien) throws SQLException {
+        String sql = "DELETE FROM pasien WHERE id_pasien = ?";
+
+        try (Connection conn = KoneksiDB.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, idPasien);
+
+            return ps.executeUpdate() > 0;
+        }
     }
 }

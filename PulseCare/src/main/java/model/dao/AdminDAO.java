@@ -30,14 +30,16 @@ public class AdminDAO {
 
         String sql = "SELECT * FROM ("
                 + "SELECT 'Admin' AS role, nip, nama_lengkap, "
-                + "CONCAT('Username: ', username) AS detail "
+                + "CONCAT('Username: ', username) AS detail, "
+                + "status_akun AS status "
                 + "FROM admin "
                 + "UNION ALL "
-                + "SELECT 'Dokter', nip, nama_lengkap, spesialisasi "
+                + "SELECT 'Dokter', nip, nama_lengkap, spesialisasi, "
+                + "status_akun "
                 + "FROM dokter "
                 + "UNION ALL "
                 + "SELECT 'Petugas', p.nip, p.nama_lengkap, "
-                + "CONCAT('Shift ', s.nama_shift) "
+                + "CONCAT('Shift ', s.nama_shift), p.status_akun "
                 + "FROM petugas p "
                 + "JOIN shift s ON s.id_shift = p.id_shift"
                 + ") AS akun "
@@ -62,6 +64,8 @@ public class AdminDAO {
                     akun.setNip(rs.getString("nip"));
                     akun.setNama(rs.getString("nama_lengkap"));
                     akun.setDetail(rs.getString("detail"));
+                    akun.setStatus(rs.getString("status"));
+
                     hasil.add(akun);
                 }
             }
@@ -109,7 +113,7 @@ public class AdminDAO {
 
                 ps.setString(1, nip);
                 ps.setString(2, nama);
-                ps.setString(3, extra);
+                ps.setString(3, nip);
                 ps.setString(4, password);
 
                 return ps.executeUpdate() > 0;
@@ -117,8 +121,8 @@ public class AdminDAO {
 
         } else if (role.equals("Dokter")) {
             sql = "INSERT INTO dokter "
-                    + "(nip, nama_lengkap, tanggal_lahir, spesialisasi, password, id_poli) "
-                    + "VALUES (?, ?, ?, ?, ?, ?)";
+                    + "(nip, nama_lengkap, tanggal_lahir, spesialisasi, password) "
+                    + "VALUES (?, ?, ?, ?, ?)";
 
             try (Connection conn = KoneksiDB.getConnection();
                  PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -128,7 +132,6 @@ public class AdminDAO {
                 ps.setDate(3, Date.valueOf(tanggalLahir));
                 ps.setString(4, extra);
                 ps.setString(5, password);
-                ps.setString(6, refId);
 
                 return ps.executeUpdate() > 0;
             }
@@ -186,17 +189,25 @@ public class AdminDAO {
             }
         }
     }
-
-    // Mengubah nama dan password akun
+    
+    // Mengubah data akun
     public boolean ubah(String role, String nip, String nama,
-            String passBaru) throws SQLException {
+            String passBaru, String refId) throws SQLException {
 
         boolean gantiPass = passBaru != null && !passBaru.isEmpty();
 
         String sql = "UPDATE " + tabel(role)
-                + " SET nama_lengkap = ?"
-                + (gantiPass ? ", password = ?" : "")
-                + " WHERE nip = ?";
+                + " SET nama_lengkap = ?";
+
+        if (role.equals("Petugas")) {
+            sql += ", id_shift = ?";
+        }
+
+        if (gantiPass) {
+            sql += ", password = ?";
+        }
+
+        sql += " WHERE nip = ?";
 
         try (Connection conn = KoneksiDB.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -204,11 +215,33 @@ public class AdminDAO {
             int i = 1;
             ps.setString(i++, nama);
 
+            if (role.equals("Petugas")) {
+                ps.setString(i++, refId);
+            }
+
             if (gantiPass) {
                 ps.setString(i++, passBaru);
             }
 
             ps.setString(i, nip);
+
+            return ps.executeUpdate() > 0;
+        }
+    }
+    // Mengubah status akun Aktif / Nonaktif
+    public boolean ubahStatus(String role, String nip,
+            String statusBaru) throws SQLException {
+
+        String sql = "UPDATE " + tabel(role)
+                + " SET status_akun = ? "
+                + "WHERE nip = ?";
+
+        try (Connection conn = KoneksiDB.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, statusBaru);
+            ps.setString(2, nip);
+
             return ps.executeUpdate() > 0;
         }
     }
