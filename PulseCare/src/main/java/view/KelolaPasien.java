@@ -122,9 +122,7 @@ public class KelolaPasien extends javax.swing.JPanel {
      
     }
     
-    public void setInfoPetugas(String nip, String nama) {
-        this.nipPetugas = nip;  
-
+    public void setInfoPengguna(String nama, String nip) {
         namaPengguna.setText(nama);
         usernamePengguna.setText(nip);
 
@@ -154,7 +152,7 @@ public class KelolaPasien extends javax.swing.JPanel {
         }
 
         // Pertahankan informasi petugas
-        setInfoPetugas(akun.getNip(), akun.getNama());
+        setInfoPengguna(akun.getNama(), akun.getNip());
 
         frame.tampil(namaHalaman);
     }
@@ -845,7 +843,7 @@ public class KelolaPasien extends javax.swing.JPanel {
                 return;
             }
 
-            setInfoPetugas(akun.getNip(), akun.getNama());
+            setInfoPengguna(akun.getNama(), akun.getNip());
 
             frame.tampilkanRiwayatKunjungan("dashboardPetugas");
         }

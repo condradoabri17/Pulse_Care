@@ -26,6 +26,7 @@ public class MainFrame extends javax.swing.JFrame {
     private final FormPemeriksaan formPemeriksaan;
     private final PerbaruiStatus perbaruiStatus;
     private final RiwayatKunjunganDokter riwayatKunjunganDokter;
+    private final KelolaPasien kelolaPasien;
     
     
     /**
@@ -46,7 +47,8 @@ public class MainFrame extends javax.swing.JFrame {
         antreanDokter = new AntreanDokter();
         panelUtama.add(antreanDokter, "antreanDokter");        
         
-        panelUtama.add(new KelolaPasien(), "kelolaPasien");
+        kelolaPasien = new KelolaPasien();
+panelUtama.add(kelolaPasien, "kelolaPasien");
         
         daftarkanKunjungan = new DaftarkanKunjungan();
         panelUtama.add(daftarkanKunjungan, "daftarkanKunjungan");
@@ -130,7 +132,10 @@ public class MainFrame extends javax.swing.JFrame {
             return;
         }
 
-        daftarkanKunjungan.setInfoPetugas(akunPetugasAktif.getNip());
+        daftarkanKunjungan.setInfoPetugas(
+    akunPetugasAktif.getNip(),
+    akunPetugasAktif.getNama()
+);
 
         tampil("daftarkanKunjungan");
     }
@@ -205,6 +210,22 @@ public class MainFrame extends javax.swing.JFrame {
             dashboardPetugas.revalidate();
             dashboardPetugas.repaint();
         }
+        
+        if (namaHalaman.equals("kelolaPasien") && akunPetugasAktif != null) {
+            kelolaPasien.setInfoPengguna(
+                akunPetugasAktif.getNama(),
+                akunPetugasAktif.getNip()
+            );
+        }
+        
+        if (namaHalaman.equals("riwayatKunjungan")
+        && akunPetugasAktif != null) {
+
+    riwayatKunjungan.setInfoPengguna(
+        akunPetugasAktif.getNama(),
+        akunPetugasAktif.getNip()
+    );
+}
         
     if (namaHalaman.equals("riwayatKunjunganDokter")) {
         riwayatKunjunganDokter.refreshData();

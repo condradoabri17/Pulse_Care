@@ -811,9 +811,15 @@ public class DaftarkanKunjungan extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jButton6ActionPerformed
 
-    public void setInfoPetugas(String nipPetugas, String namaPetugas) {
-        nipPetugasAktif = nipPetugas;
-    }
+   public void setInfoPetugas(String nipPetugas, String namaPetugas) {
+    this.nipPetugasAktif = nipPetugas;
+
+    namaPengguna.setText(namaPetugas);
+    usernamePengguna.setText(nipPetugas);
+
+    namaPengguna.setForeground(java.awt.Color.WHITE);
+    usernamePengguna.setForeground(java.awt.Color.WHITE);
+}
         private void muatPoliklinik() {
         daftarPoli.clear();
         jComboBox1.removeAllItems();
