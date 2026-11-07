@@ -10,6 +10,9 @@ import java.util.List;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.JButton;
 
 /**
  *
@@ -23,6 +26,18 @@ public class AntreanDokter extends javax.swing.JPanel {
      */
     public AntreanDokter() {
         initComponents();
+
+        jTable2.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent evt) {
+                int baris = jTable2.rowAtPoint(evt.getPoint());
+                int kolom = jTable2.columnAtPoint(evt.getPoint());
+
+                if (baris >= 0 && kolom == 4) {
+                    bukaFormPemeriksaan(baris);
+                }
+            }
+        });
     }
     
     public void setInfoPengguna(String nama, String nip) {
@@ -78,6 +93,49 @@ public class AntreanDokter extends javax.swing.JPanel {
         }
 
         jTable2.setModel(model);
+        jTable2.getColumnModel().getColumn(4).setCellRenderer(
+            (table, value, isSelected, hasFocus, row, column) -> {
+                JButton tombol = new JButton("Periksa");
+                return tombol;
+            }
+        );
+    }
+    private void bukaFormPemeriksaan(int baris) {
+        try {
+            String idKunjungan = jTable2.getValueAt(
+                    baris, 1
+            ).toString();
+
+            KunjunganDAO dao = new KunjunganDAO();
+
+            Object[] data = dao.detailKunjunganUntukPemeriksaan(
+                    idKunjungan
+            );
+
+            if (data == null) {
+                JOptionPane.showMessageDialog(this,
+                        "Data kunjungan tidak ditemukan.");
+                return;
+            }
+
+            MainFrame frame = (MainFrame)
+                    javax.swing.SwingUtilities.getWindowAncestor(this);
+
+            FormPemeriksaan form = frame.getFormPemeriksaan();
+
+            form.setDataKunjungan(
+                    data,
+                    akunDokter.getNama(),
+                    akunDokter.getNip()
+            );
+
+            frame.tampil("formPemeriksaan");
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Gagal mengambil detail kunjungan: "
+                    + e.getMessage());
+        }
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -410,13 +468,24 @@ public class AntreanDokter extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-    MainFrame frame = (MainFrame) javax.swing.SwingUtilities.getWindowAncestor(this);
-    frame.tampil("dashboardDokter");
+    MainFrame frame = (MainFrame) javax.swing.SwingUtilities
+            .getWindowAncestor(this);
+
+    if (frame != null) {
+        frame.tampil("dashboardDokter");
+    }
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-    MainFrame frame = (MainFrame) javax.swing.SwingUtilities.getWindowAncestor(this);
-    frame.tampil("formPemeriksaan");
+    int baris = jTable2.getSelectedRow();
+
+    if (baris == -1) {
+        JOptionPane.showMessageDialog(this,
+                "Pilih pasien terlebih dahulu.");
+        return;
+    }
+
+    bukaFormPemeriksaan(baris);
     }//GEN-LAST:event_jButton2ActionPerformed
 
 
@@ -444,4 +513,8 @@ public class AntreanDokter extends javax.swing.JPanel {
     private javax.swing.JLabel namaDokter;
     private javax.swing.JLabel usernameDokter;
     // End of variables declaration//GEN-END:variables
+
+    public void muatAntreanDokter() {
+        tampilkanAntrean();
+    }
 }

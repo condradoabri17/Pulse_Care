@@ -6,6 +6,7 @@ package view;
 
 import java.awt.CardLayout;
 import model.Akun;
+
 /**
  *
  * @author Lenovo
@@ -16,12 +17,14 @@ public class MainFrame extends javax.swing.JFrame {
     private DashboardAdmin dashboardAdmin;
     private DashboardPetugas dashboardPetugas;
     private DashboardDokter dashboardDokter;
-    private RiwayatKunjungan riwayatKunjungan;
-    private AntreanDokter antreanDokter;
-    private KelolaAkun kelolaAkun;
+    private final RiwayatKunjungan riwayatKunjungan;
+    private final AntreanDokter antreanDokter;
+    private final KelolaAkun kelolaAkun;
     private Akun akunPetugasAktif;
     private Akun akunDokterAktif;
     private final DaftarkanKunjungan daftarkanKunjungan;
+    private final FormPemeriksaan formPemeriksaan;
+    private final PerbaruiStatus perbaruiStatus;
     
     
     
@@ -35,19 +38,26 @@ public class MainFrame extends javax.swing.JFrame {
         
         panelUtama.add(new MenuUtama(), "menu");
         panelUtama.add(new Login(), "login");
-        panelUtama.add(new KelolaAkun(), "kelolaAkun");
+        kelolaAkun = new KelolaAkun();
+        panelUtama.add(kelolaAkun, "kelolaAkun");
 
         antreanDokter = new AntreanDokter();
         panelUtama.add(antreanDokter, "antreanDokter");        
-        panelUtama.add(new RiwayatKunjungan(), "riwayatKunjungan");
         
         panelUtama.add(new KelolaPasien(), "kelolaPasien");
         
         daftarkanKunjungan = new DaftarkanKunjungan();
         panelUtama.add(daftarkanKunjungan, "daftarkanKunjungan");
         
-        panelUtama.add(new PerbaruiStatus(), "perbaruiStatus");
+        formPemeriksaan = new FormPemeriksaan();
+        panelUtama.add(formPemeriksaan, "formPemeriksaan");
+        
+        perbaruiStatus = new PerbaruiStatus();
+        panelUtama.add(perbaruiStatus, "perbaruiStatus");
 
+        riwayatKunjungan = new RiwayatKunjungan();
+        panelUtama.add(riwayatKunjungan, "riwayatKunjungan");
+        
         CardLayout cl = (CardLayout) panelUtama.getLayout();
 
         cl.show(panelUtama, "menu");
@@ -70,6 +80,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         panelUtama.revalidate();
         panelUtama.repaint();
+        
     }
     public void tampilkanDashboardPetugas(Akun akun) {
         akunPetugasAktif = akun;
@@ -92,10 +103,17 @@ public class MainFrame extends javax.swing.JFrame {
 
         panelUtama.revalidate();
         panelUtama.repaint();
+        
     }
         public Akun getAkunPetugasAktif() {
         return akunPetugasAktif;
+    }
+        public Akun getAkunDokterAktif() {
+        return akunDokterAktif;
     }    
+        public PerbaruiStatus getPerbaruiStatus() {
+        return perbaruiStatus;
+    }
         
     public void tampilkanDaftarkanKunjungan() {
         if (akunPetugasAktif == null) {
@@ -128,6 +146,14 @@ public class MainFrame extends javax.swing.JFrame {
         akunDokterAktif = akun;
         antreanDokter.setAkunDokter(akun);
     }
+    
+    public FormPemeriksaan getFormPemeriksaan() {
+    return formPemeriksaan;
+}
+    public void tampilkanRiwayatKunjungan(String halamanDashboard) {
+        riwayatKunjungan.setHalamanDashboardAsal(halamanDashboard);
+        tampil("riwayatKunjungan");
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -152,11 +178,24 @@ public class MainFrame extends javax.swing.JFrame {
         setBounds(0, 0, 820, 558);
     }// </editor-fold>//GEN-END:initComponents
     public void tampil(String namaHalaman) {
-        java.awt.CardLayout cl =
-                (java.awt.CardLayout) panelUtama.getLayout();
+        CardLayout cl =
+                (CardLayout) panelUtama.getLayout();
 
         cl.show(panelUtama, namaHalaman);
-}
+
+        if (namaHalaman.equals("antreanDokter")) {
+            antreanDokter.muatAntreanDokter();
+        }
+
+        if (namaHalaman.equals("dashboardPetugas")
+                && dashboardPetugas != null) {
+            dashboardPetugas.revalidate();
+            dashboardPetugas.repaint();
+        }
+
+        panelUtama.revalidate();
+        panelUtama.repaint();
+    }
     /**
      * @param args the command line arguments
      */
@@ -183,4 +222,5 @@ public class MainFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel panelUtama;
     // End of variables declaration//GEN-END:variables
+
 }

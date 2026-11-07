@@ -173,8 +173,14 @@ public class KunjunganDAO {
                 + "JOIN pasien p ON rk.id_pasien = p.id_pasien "
                 + "JOIN poliklinik pol ON rk.id_poli = pol.id_poli "
                 + "WHERE rk.tanggal_pendaftaran = CURDATE() "
-                + "ORDER BY rk.waktu_pendaftaran ASC";
-
+                + "ORDER BY "
+                + "CASE "
+                + "WHEN rk.status_kunjungan = 'menunggu' THEN 1 "
+                + "WHEN rk.status_kunjungan = 'diperiksa' THEN 2 "
+                + "WHEN rk.status_kunjungan = 'selesai' THEN 3 "
+                + "ELSE 4 END, "
+                + "rk.waktu_pendaftaran ASC";
+        
         try (Connection conn = KoneksiDB.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
@@ -230,15 +236,15 @@ public class KunjunganDAO {
             throws SQLException {
 
         String sql = "SELECT rk.nomor_antrian, "
-                + "p.nama_lengkap, p.id_pasien, "
-                + "p.jenis_kelamin, p.status_bpjs "
-                + "FROM riwayat_kunjungan rk "
-                + "JOIN pasien p ON rk.id_pasien = p.id_pasien "
-                + "WHERE rk.tanggal_pendaftaran = CURDATE() "
-                + "AND rk.id_poli = ? "
-                + "AND rk.status_kunjungan = 'diperiksa' "
-                + "ORDER BY rk.waktu_pendaftaran ASC "
-                + "LIMIT 1";
+        + "p.nama_lengkap, p.id_pasien, "
+        + "p.jenis_kelamin, p.status_bpjs "
+        + "FROM riwayat_kunjungan rk "
+        + "JOIN pasien p ON rk.id_pasien = p.id_pasien "
+        + "WHERE rk.tanggal_pendaftaran = CURDATE() "
+        + "AND rk.id_poli = ? "
+        + "AND rk.status_kunjungan = 'diperiksa' "
+        + "ORDER BY rk.waktu_pendaftaran ASC "
+        + "LIMIT 1";
 
         try (Connection conn = KoneksiDB.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -341,8 +347,8 @@ public class KunjunganDAO {
                 String sqlInsert = "INSERT INTO riwayat_kunjungan "
                         + "(id_kunjungan, nip_petugas, id_pasien, id_poli, "
                         + "waktu_pendaftaran, nomor_antrian, status_kunjungan, "
-                        + "tanggal_pendaftaran, keluhan) "
-                        + "VALUES (?, ?, ?, ?, NOW(), ?, 'menunggu', CURDATE(), ?)";
+                        + "tanggal_pendaftaran) "
+                        + "VALUES (?, ?, ?, ?, NOW(), ?, 'menunggu', CURDATE())";
 
                 try (PreparedStatement ps = conn.prepareStatement(sqlInsert)) {
                     ps.setString(1, idKunjungan);
@@ -350,7 +356,6 @@ public class KunjunganDAO {
                     ps.setString(3, idPasien);
                     ps.setString(4, idPoli);
                     ps.setString(5, antrean);
-                    ps.setString(6, keluhan);
 
                     ps.executeUpdate();
                 }
@@ -366,5 +371,77 @@ public class KunjunganDAO {
                 conn.setAutoCommit(true);
             }
         }
+    }
+    
+            // Mengambil data kunjungan hari ini untuk halaman Perbarui Status
+        public List<Object[]> daftarPerbaruiStatusHariIni()
+                throws SQLException {
+
+            List<Object[]> daftar = new ArrayList<>();
+
+            String sql = "SELECT rk.id_kunjungan, rk.nomor_antrian, "
+                    + "p.nama_lengkap, pol.nama_poli, "
+                    + "rk.status_kunjungan "
+                    + "FROM riwayat_kunjungan rk "
+                    + "JOIN pasien p ON rk.id_pasien = p.id_pasien "
+                    + "JOIN poliklinik pol ON rk.id_poli = pol.id_poli "
+                    + "WHERE rk.tanggal_pendaftaran = CURDATE() "
+                    + "ORDER BY rk.waktu_pendaftaran ASC";
+
+            try (Connection conn = KoneksiDB.getConnection();
+                 PreparedStatement ps = conn.prepareStatement(sql);
+                 ResultSet rs = ps.executeQuery()) {
+
+                while (rs.next()) {
+                    daftar.add(new Object[]{
+                        rs.getString("id_kunjungan"),
+                        rs.getString("nomor_antrian"),
+                        rs.getString("nama_lengkap"),
+                        rs.getString("nama_poli"),
+                        rs.getString("status_kunjungan")
+                    });
+                }
+            }
+
+            return daftar;
+        }
+        // Mengambil detail kunjungan berdasarkan ID kunjungan
+    public Object[] detailKunjunganUntukPemeriksaan(String idKunjungan)
+            throws SQLException {
+
+        String sql = "SELECT rk.id_kunjungan, "
+                + "rk.nomor_antrian, "
+                + "p.id_pasien, p.nama_lengkap, "
+                + "p.tanggal_lahir, p.jenis_kelamin, "
+                + "p.status_bpjs, pol.nama_poli, "
+                + "rk.keluhan "
+                + "FROM riwayat_kunjungan rk "
+                + "JOIN pasien p ON rk.id_pasien = p.id_pasien "
+                + "JOIN poliklinik pol ON rk.id_poli = pol.id_poli "
+                + "WHERE rk.id_kunjungan = ?";
+
+        try (Connection conn = KoneksiDB.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, idKunjungan);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new Object[]{
+                        rs.getString("id_kunjungan"),
+                        rs.getString("nomor_antrian"),
+                        rs.getString("id_pasien"),
+                        rs.getString("nama_lengkap"),
+                        rs.getDate("tanggal_lahir"),
+                        rs.getString("jenis_kelamin"),
+                        rs.getString("status_bpjs"),
+                        rs.getString("nama_poli"),
+                        rs.getString("keluhan")
+                    };
+                }
+            }
+        }
+
+        return null;
     }
 }

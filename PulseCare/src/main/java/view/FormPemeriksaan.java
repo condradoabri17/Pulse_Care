@@ -4,11 +4,18 @@
  */
 package view;
 
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
+
 /**
  *
  * @author ASUS
  */
 public class FormPemeriksaan extends javax.swing.JPanel {
+    private String idKunjungan;
+    private String nipDokter;
 
     /**
      * Creates new form AntreanDokter
@@ -17,6 +24,48 @@ public class FormPemeriksaan extends javax.swing.JPanel {
         initComponents();
     }
 
+    public void setDataKunjungan(
+            Object[] data, String namaDokter, String nipDokter) {
+
+        this.idKunjungan = data[0].toString();
+        this.nipDokter = nipDokter;
+
+        lblNamaPasien.setText(data[3].toString());
+
+        idPasienAntrean.setText(
+                data[2].toString() + " - " + data[1].toString()
+        );
+
+        Date tanggalLahir = (Date) data[4];
+        LocalDate tglLahir = tanggalLahir.toLocalDate();
+
+        int umur = Period.between(
+                tglLahir, LocalDate.now()
+        ).getYears();
+
+        String tanggalFormat = tglLahir.format(
+                DateTimeFormatter.ofPattern("dd-MM-yyyy")
+        );
+
+        jLabel13.setText(
+                tanggalFormat + " (" + umur + " th)"
+        );
+
+        jenisKelamin.setText(data[5].toString());
+        statusBpjs.setText(data[6].toString());
+        lblPoli.setText(data[7].toString());
+
+        lblDokterPemeriksa.setText(namaDokter);
+
+        kolomKeluhan.setText(
+                data[8] == null ? "" : data[8].toString()
+        );
+
+        jLabel3.setText(
+                "Catat hasil pemeriksaan untuk kunjungan "
+                + idKunjungan
+        );
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -42,33 +91,33 @@ public class FormPemeriksaan extends javax.swing.JPanel {
         jLabel11 = new javax.swing.JLabel();
         jPanel12 = new javax.swing.JPanel();
         jLabel15 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
+        lblDokterPemeriksa = new javax.swing.JLabel();
         jLabel18 = new javax.swing.JLabel();
-        jLabel19 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
-        jLabel20 = new javax.swing.JLabel();
+        IDantrean = new javax.swing.JLabel();
+        idPasienAntrean = new javax.swing.JLabel();
+        tglLahirUmur = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
-        jLabel16 = new javax.swing.JLabel();
+        jenisKelamin = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
-        jLabel23 = new javax.swing.JLabel();
+        statusBpjs = new javax.swing.JLabel();
         jLabel24 = new javax.swing.JLabel();
-        jLabel25 = new javax.swing.JLabel();
-        jLabel26 = new javax.swing.JLabel();
+        lblPoli = new javax.swing.JLabel();
+        lblNamaPasien = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        kolomKeluhan = new javax.swing.JTextField();
         jLabel28 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        jTextField3 = new javax.swing.JTextField();
+        kolomDiagnosa = new javax.swing.JTextField();
         jLabel29 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        kolomResepObat = new javax.swing.JTextField();
         jLabel17 = new javax.swing.JLabel();
         jLabel31 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        kolomHasilPemeriksaan = new javax.swing.JTextField();
         jLabel30 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        kolomCatatanTindakLanjut = new javax.swing.JTextField();
+        btnBatal = new javax.swing.JButton();
+        btnSimpanHasil = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel27 = new javax.swing.JLabel();
 
@@ -251,28 +300,28 @@ public class FormPemeriksaan extends javax.swing.JPanel {
         jLabel15.setText("Nama");
         jPanel1.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 120, 40, 20));
 
-        jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel10.setText("Andi Pratama");
-        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 430, 140, 30));
+        lblDokterPemeriksa.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblDokterPemeriksa.setText("Andi Pratama");
+        jPanel1.add(lblDokterPemeriksa, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 430, 140, 30));
 
         jLabel18.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel18.setForeground(new java.awt.Color(100, 127, 140));
         jLabel18.setText("Dokter Pemeriksa");
         jPanel1.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 420, 160, 20));
 
-        jLabel19.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel19.setForeground(new java.awt.Color(100, 127, 140));
-        jLabel19.setText("ID Pasien - Antrean");
-        jPanel1.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 160, 160, 40));
+        IDantrean.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        IDantrean.setForeground(new java.awt.Color(100, 127, 140));
+        IDantrean.setText("ID Pasien - Antrean");
+        jPanel1.add(IDantrean, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 160, 160, 40));
 
-        jLabel12.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel12.setText("PS004 - 003");
-        jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 180, -1, 30));
+        idPasienAntrean.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        idPasienAntrean.setText("PS004 - 003");
+        jPanel1.add(idPasienAntrean, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 180, -1, 30));
 
-        jLabel20.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel20.setForeground(new java.awt.Color(100, 127, 140));
-        jLabel20.setText("Tanggal Lahir");
-        jPanel1.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 210, 160, 40));
+        tglLahirUmur.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        tglLahirUmur.setForeground(new java.awt.Color(100, 127, 140));
+        tglLahirUmur.setText("Tanggal Lahir");
+        jPanel1.add(tglLahirUmur, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 210, 160, 40));
 
         jLabel13.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel13.setText("25-04-1985 (41 th)");
@@ -283,36 +332,36 @@ public class FormPemeriksaan extends javax.swing.JPanel {
         jLabel21.setText("Jenis Kelamin");
         jPanel1.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 270, 160, 20));
 
-        jLabel16.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel16.setText("Perempuan");
-        jPanel1.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 280, 140, 30));
+        jenisKelamin.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jenisKelamin.setText("Perempuan");
+        jPanel1.add(jenisKelamin, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 280, 140, 30));
 
         jLabel22.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel22.setForeground(new java.awt.Color(100, 127, 140));
         jLabel22.setText("BPJS");
         jPanel1.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 320, 160, 20));
 
-        jLabel23.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel23.setText("Aktif");
-        jPanel1.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 330, 140, 30));
+        statusBpjs.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        statusBpjs.setText("Aktif");
+        jPanel1.add(statusBpjs, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 330, 140, 30));
 
         jLabel24.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel24.setForeground(new java.awt.Color(100, 127, 140));
         jLabel24.setText("Poliklinik");
         jPanel1.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 370, 160, 20));
 
-        jLabel25.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel25.setText("Penyakit Dalam");
-        jPanel1.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 380, 140, 30));
+        lblPoli.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lblPoli.setText("Penyakit Dalam");
+        jPanel1.add(lblPoli, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 380, 140, 30));
 
-        jLabel26.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel26.setForeground(new java.awt.Color(22, 63, 76));
-        jLabel26.setText("Dewi Sartika");
-        jPanel1.add(jLabel26, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 130, -1, 30));
+        lblNamaPasien.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lblNamaPasien.setForeground(new java.awt.Color(22, 63, 76));
+        lblNamaPasien.setText("Dewi Sartika");
+        jPanel1.add(lblNamaPasien, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 130, -1, 30));
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 70, -1, -1));
 
-        jTextField1.addActionListener(this::jTextField1ActionPerformed);
-        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 110, 300, -1));
+        kolomKeluhan.addActionListener(this::kolomKeluhanActionPerformed);
+        jPanel1.add(kolomKeluhan, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 110, 300, -1));
 
         jLabel28.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel28.setForeground(new java.awt.Color(22, 63, 76));
@@ -322,13 +371,13 @@ public class FormPemeriksaan extends javax.swing.JPanel {
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(20, 96, 108)));
 
-        jTextField3.addActionListener(this::jTextField3ActionPerformed);
+        kolomDiagnosa.addActionListener(this::kolomDiagnosaActionPerformed);
 
         jLabel29.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel29.setForeground(new java.awt.Color(22, 63, 76));
         jLabel29.setText("Diagnosa");
 
-        jTextField4.addActionListener(this::jTextField4ActionPerformed);
+        kolomResepObat.addActionListener(this::kolomResepObatActionPerformed);
 
         jLabel17.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel17.setForeground(new java.awt.Color(22, 63, 76));
@@ -342,17 +391,17 @@ public class FormPemeriksaan extends javax.swing.JPanel {
         jLabel30.setForeground(new java.awt.Color(22, 63, 76));
         jLabel30.setText("Catatan Tindak Lanjut");
 
-        jButton2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jButton2.setForeground(new java.awt.Color(20, 96, 108));
-        jButton2.setText("Batal");
-        jButton2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(20, 96, 108), 2));
+        btnBatal.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnBatal.setForeground(new java.awt.Color(20, 96, 108));
+        btnBatal.setText("Batal");
+        btnBatal.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(20, 96, 108), 2));
 
-        jButton3.setBackground(new java.awt.Color(20, 96, 108));
-        jButton3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jButton3.setForeground(new java.awt.Color(255, 255, 255));
-        jButton3.setText("Simpan Hasil");
-        jButton3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(20, 96, 108), 2));
-        jButton3.addActionListener(this::jButton3ActionPerformed);
+        btnSimpanHasil.setBackground(new java.awt.Color(20, 96, 108));
+        btnSimpanHasil.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnSimpanHasil.setForeground(new java.awt.Color(255, 255, 255));
+        btnSimpanHasil.setText("Simpan Hasil");
+        btnSimpanHasil.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(20, 96, 108), 2));
+        btnSimpanHasil.addActionListener(this::btnSimpanHasilActionPerformed);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -362,18 +411,18 @@ public class FormPemeriksaan extends javax.swing.JPanel {
                 .addGap(19, 19, 19)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnBatal, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnSimpanHasil, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jLabel30, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(kolomCatatanTindakLanjut, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(kolomHasilPemeriksaan, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel31, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(kolomResepObat, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel29, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(kolomDiagnosa, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(19, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -383,24 +432,24 @@ public class FormPemeriksaan extends javax.swing.JPanel {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(40, 40, 40)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(kolomHasilPemeriksaan, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel31, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel29)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(kolomDiagnosa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel17)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(kolomResepObat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel30)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(kolomCatatanTindakLanjut, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnBatal, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSimpanHasil, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(17, Short.MAX_VALUE))
         );
 
@@ -472,21 +521,21 @@ public class FormPemeriksaan extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton7ActionPerformed
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void kolomKeluhanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_kolomKeluhanActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_kolomKeluhanActionPerformed
 
-    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
+    private void kolomDiagnosaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_kolomDiagnosaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField3ActionPerformed
+    }//GEN-LAST:event_kolomDiagnosaActionPerformed
 
-    private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
+    private void kolomResepObatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_kolomResepObatActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField4ActionPerformed
+    }//GEN-LAST:event_kolomResepObatActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void btnSimpanHasilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanHasilActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_btnSimpanHasilActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         MainFrame frame = (MainFrame)
@@ -497,31 +546,25 @@ public class FormPemeriksaan extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel IDantrean;
+    private javax.swing.JButton btnBatal;
+    private javax.swing.JButton btnSimpanHasil;
+    private javax.swing.JLabel idPasienAntrean;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
-    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
-    private javax.swing.JLabel jLabel25;
-    private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel29;
@@ -535,12 +578,18 @@ public class FormPemeriksaan extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel6;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
+    private javax.swing.JLabel jenisKelamin;
+    private javax.swing.JTextField kolomCatatanTindakLanjut;
+    private javax.swing.JTextField kolomDiagnosa;
+    private javax.swing.JTextField kolomHasilPemeriksaan;
+    private javax.swing.JTextField kolomKeluhan;
+    private javax.swing.JTextField kolomResepObat;
+    private javax.swing.JLabel lblDokterPemeriksa;
+    private javax.swing.JLabel lblNamaPasien;
+    private javax.swing.JLabel lblPoli;
     private javax.swing.JLabel namaPetugas;
+    private javax.swing.JLabel statusBpjs;
+    private javax.swing.JLabel tglLahirUmur;
     private javax.swing.JLabel usernamePetugas;
     // End of variables declaration//GEN-END:variables
 }

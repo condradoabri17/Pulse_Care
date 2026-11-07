@@ -53,6 +53,7 @@ view\AntreanDokter$3.class
 view\DaftarkanKunjungan.class
 view\DashboardAdmin$5.class
 view\DaftarkanKunjungan$2.class
+view\AntreanDokter$6.class
 config\KoneksiDB.class
 view\AntreanDokter.class
 view\PerbaruiStatus$5.class
@@ -72,6 +73,7 @@ config\TestKoneksiDB.class
 view\MenuUtama.class
 view\KelolaAkun$5.class
 view\KelolaPasien$3.class
+view\PerbaruiStatus$6.class
 view\DashboardDokter$6.class
 controller\RiwayatKunjunganController.class
 view\KelolaAkun.class

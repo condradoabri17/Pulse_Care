@@ -63,4 +63,10 @@ public class KunjunganController {
             idKunjungan.trim(), status.trim()
         );
     }
+        // Mengambil data kunjungan hari ini untuk perbarui status
+    public List<Object[]> daftarPerbaruiStatusHariIni()
+            throws SQLException {
+
+        return kunjunganDAO.daftarPerbaruiStatusHariIni();
+    }
 }

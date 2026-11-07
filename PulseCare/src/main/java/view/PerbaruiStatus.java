@@ -4,21 +4,178 @@
  */
 package view;
 
+import controller.KunjunganController;
+import java.sql.SQLException;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author ASUS
  */
 public class PerbaruiStatus extends javax.swing.JPanel {
-
+private final KunjunganController kunjunganController = new KunjunganController();
+private String halamanAsal = "dashboardPetugas";
+private String idKunjunganTerpilih = null;
     /**
      * Creates new form PerbaruiStatus
      */
     public PerbaruiStatus() {
         initComponents();
+
+        aturTabel();
+        muatTabelKunjunganHariIni();
+
+        jTable2.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                pilihKunjungan();
+            }
+        });
+
+        jButton2.addActionListener(e -> simpanStatus());
     }
     public void setInfoPengguna(String nama, String nip) {
         namaAdmin.setText(nama);
         usernameAdmin.setText(nip);
+    }
+    
+    private void aturTabel() {
+
+        DefaultTableModel model = new DefaultTableModel(
+            new String[]{
+                "ID Kunjungan",
+                "Antrean",
+                "Pasien",
+                "Poliklinik",
+                "Status Saat Ini"
+            }, 0
+        ) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        jTable2.setModel(model);
+        jTable2.setRowHeight(35);
+        jTable2.setSelectionMode(
+            javax.swing.ListSelectionModel.SINGLE_SELECTION
+        );
+    }
+    private void muatTabelKunjunganHariIni() {
+
+        DefaultTableModel model =
+            (DefaultTableModel) jTable2.getModel();
+
+        model.setRowCount(0);
+
+        try {
+            List<Object[]> daftar =
+                kunjunganController.daftarPerbaruiStatusHariIni();
+
+            for (Object[] data : daftar) {
+
+                String status = data[4].toString();
+
+                status = status.substring(0, 1).toUpperCase()
+                        + status.substring(1).toLowerCase();
+
+                model.addRow(new Object[]{
+                    data[0],
+                    data[1],
+                    data[2],
+                    data[3],
+                    status
+                });
+            }
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(
+                this,
+                "Gagal memuat data kunjungan: " + e.getMessage()
+            );
+        }
+    }
+    private void pilihKunjungan() {
+
+        int baris = jTable2.getSelectedRow();
+
+        if (baris == -1) {
+            idKunjunganTerpilih = null;
+            lblKunjunganTerpilih.setText("Belum ada kunjungan dipilih");
+            return;
+        }
+
+        int modelRow = jTable2.convertRowIndexToModel(baris);
+
+        DefaultTableModel model =
+                (DefaultTableModel) jTable2.getModel();
+
+        idKunjunganTerpilih =
+                model.getValueAt(modelRow, 0).toString();
+
+        String antrean =
+                model.getValueAt(modelRow, 1).toString();
+
+        String nama =
+                model.getValueAt(modelRow, 2).toString();
+
+        lblKunjunganTerpilih.setText(
+                idKunjunganTerpilih + " - " + nama
+                + " (antrean " + antrean + ")"
+        );
+
+        jComboBox1.setSelectedItem(
+                model.getValueAt(modelRow, 4).toString()
+        );
+    }
+    private void simpanStatus() {
+
+        if (idKunjunganTerpilih == null) {
+            JOptionPane.showMessageDialog(
+                this,
+                "Pilih kunjungan terlebih dahulu!"
+            );
+            return;
+        }
+
+        String status = jComboBox1.getSelectedItem().toString();
+
+        try {
+            boolean berhasil =
+                kunjunganController.ubahStatus(
+                    idKunjunganTerpilih,
+                    status
+                );
+
+            if (berhasil) {
+                JOptionPane.showMessageDialog(
+                    this,
+                    "Status kunjungan berhasil diperbarui!"
+                );
+
+                idKunjunganTerpilih = null;
+                lblKunjunganTerpilih.setText("Belum ada kunjungan dipilih");
+
+                muatTabelKunjunganHariIni();
+
+            } else {
+                JOptionPane.showMessageDialog(
+                    this,
+                    "Status kunjungan gagal diperbarui!"
+                );
+            }
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(
+                this,
+                "Terjadi kesalahan: " + e.getMessage()
+            );
+        }
+    }
+    public void setHalamanAsal(String halaman) {
+        this.halamanAsal = halaman;
     }
 
     /**
@@ -52,7 +209,7 @@ public class PerbaruiStatus extends javax.swing.JPanel {
         jScrollPane3 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
         jPanel4 = new javax.swing.JPanel();
-        jLabel28 = new javax.swing.JLabel();
+        lblKunjunganTerpilih = new javax.swing.JLabel();
         jLabel24 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
         jButton2 = new javax.swing.JButton();
@@ -299,10 +456,10 @@ public class PerbaruiStatus extends javax.swing.JPanel {
         jPanel4.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(20, 96, 108), 1, true));
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel28.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel28.setForeground(new java.awt.Color(22, 63, 76));
-        jLabel28.setText("KJ020 - Fajar Hidayat (antrean 005)");
-        jPanel4.add(jLabel28, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 40, 290, -1));
+        lblKunjunganTerpilih.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lblKunjunganTerpilih.setForeground(new java.awt.Color(22, 63, 76));
+        lblKunjunganTerpilih.setText("Belum ada kunjungan dipilih");
+        jPanel4.add(lblKunjunganTerpilih, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 40, 290, -1));
 
         jLabel24.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel24.setForeground(new java.awt.Color(100, 127, 140));
@@ -310,6 +467,7 @@ public class PerbaruiStatus extends javax.swing.JPanel {
         jPanel4.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 10, 160, 20));
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Menunggu", "Diperiksa", "Selesai" }));
+        jComboBox1.addActionListener(this::jComboBox1ActionPerformed);
         jPanel4.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 30, 130, 30));
 
         jButton2.setBackground(new java.awt.Color(20, 96, 108));
@@ -392,7 +550,10 @@ public class PerbaruiStatus extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnPerbaruiStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPerbaruiStatusActionPerformed
-        // TODO add your handling code here:
+    MainFrame frame = (MainFrame)
+            javax.swing.SwingUtilities.getWindowAncestor(this);
+
+    frame.tampil("perbaruiStatus");
     }//GEN-LAST:event_btnPerbaruiStatusActionPerformed
 
     private void btnPerbaruiStatusMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPerbaruiStatusMouseClicked
@@ -422,11 +583,26 @@ public class PerbaruiStatus extends javax.swing.JPanel {
     }//GEN-LAST:event_btnDashboardDokterMouseClicked
 
     private void btnDashboardDokterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDashboardDokterActionPerformed
-        MainFrame frame = (MainFrame)
-        javax.swing.SwingUtilities.getWindowAncestor(this);
+    MainFrame frame = (MainFrame)
+            javax.swing.SwingUtilities.getWindowAncestor(this);
 
-        frame.tampil("dashboardDokter");
+    if (frame != null) {
+        frame.tampil(halamanAsal);
+    }
     }//GEN-LAST:event_btnDashboardDokterActionPerformed
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        jComboBox1.setModel(
+            new javax.swing.DefaultComboBoxModel<>(
+                new String[] {
+                    "Menunggu",
+                    "Diperiksa",
+                    "Selesai",
+                    "Batal"
+                }
+            )
+        );
+    }//GEN-LAST:event_jComboBox1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -442,7 +618,6 @@ public class PerbaruiStatus extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
-    private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
@@ -455,6 +630,7 @@ public class PerbaruiStatus extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTable2;
+    private javax.swing.JLabel lblKunjunganTerpilih;
     private javax.swing.JLabel namaAdmin;
     private javax.swing.JLabel usernameAdmin;
     // End of variables declaration//GEN-END:variables

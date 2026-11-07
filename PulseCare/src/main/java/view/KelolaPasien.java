@@ -753,51 +753,19 @@ public class KelolaPasien extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void BtnDashboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnDashboardActionPerformed
-        DashboardPetugas halaman = new DashboardPetugas();
+    MainFrame frame = (MainFrame) javax.swing.SwingUtilities
+            .getWindowAncestor(this);
 
-        MainFrame mainFrame = (MainFrame) javax.swing.SwingUtilities
-                .getWindowAncestor(this);
-
-        halaman.setInfoPetugas(
-                nipPetugas,
-                namaPetugas.getText(),
-                mainFrame.getAkunPetugasAktif().getDetail()
-        );
-
-        javax.swing.JFrame jendela = new javax.swing.JFrame("Dashboard Petugas");
-
-        jendela.setDefaultCloseOperation(
-                javax.swing.JFrame.DISPOSE_ON_CLOSE
-        );
-
-        jendela.setContentPane(halaman);
-        jendela.pack();
-        jendela.setResizable(false);
-        jendela.setLocationRelativeTo(null);
-        jendela.setVisible(true);
-
-        javax.swing.SwingUtilities.getWindowAncestor(this).dispose();
+    if (frame != null) {
+        frame.tampil("dashboardPetugas");
+    }
     }//GEN-LAST:event_BtnDashboardActionPerformed
 
     private void BtnPasienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnPasienActionPerformed
-        KelolaPasien halamanPasien = new KelolaPasien();
+        MainFrame frame = (MainFrame)
+                javax.swing.SwingUtilities.getWindowAncestor(this);
 
-        halamanPasien.setInfoPetugas(
-            nipPetugas,
-            namaPetugas.getText()
-        );
-
-        javax.swing.JFrame frame = new javax.swing.JFrame("Data Pasien");
-        frame.setDefaultCloseOperation(javax.swing.JFrame.EXIT_ON_CLOSE);
-        frame.setContentPane(halamanPasien);
-        frame.pack();
-        frame.setResizable(false);
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-
-        javax.swing.SwingUtilities.getWindowAncestor(this).dispose();
+        frame.tampil("kelolaPasien");
     }//GEN-LAST:event_BtnPasienActionPerformed
 
     private void BtnDaftarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnDaftarActionPerformed
@@ -806,54 +774,17 @@ public class KelolaPasien extends javax.swing.JPanel {
     }//GEN-LAST:event_BtnDaftarActionPerformed
 
     private void BtnRiwayatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnRiwayatActionPerformed
-        RiwayatKunjungan halaman = new RiwayatKunjungan();
+    MainFrame frame = (MainFrame)
+            javax.swing.SwingUtilities.getWindowAncestor(this);
 
-        halaman.setInfoPetugas(
-                nipPetugas,
-                namaPetugas.getText()
-        );
-
-        javax.swing.JFrame frame =
-                new javax.swing.JFrame("Riwayat Kunjungan");
-
-        frame.setDefaultCloseOperation(
-                javax.swing.JFrame.DISPOSE_ON_CLOSE
-        );
-
-        frame.setContentPane(halaman);
-        frame.pack();
-        frame.setResizable(false);
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-        frame.setResizable(false);
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-
-        javax.swing.SwingUtilities.getWindowAncestor(this).dispose();
+    frame.tampil("riwayatKunjungan");
     }//GEN-LAST:event_BtnRiwayatActionPerformed
 
     private void BtnStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnStatusActionPerformed
-        PerbaruiStatus halaman = new PerbaruiStatus();
+    MainFrame frame = (MainFrame)
+            javax.swing.SwingUtilities.getWindowAncestor(this);
 
-        halaman.setInfoPetugas(
-                nipPetugas,
-                namaPetugas.getText()
-        );
-
-        javax.swing.JFrame frame =
-                new javax.swing.JFrame("Perbarui Status Kunjungan");
-
-        frame.setDefaultCloseOperation(
-                javax.swing.JFrame.DISPOSE_ON_CLOSE
-        );
-
-        frame.setContentPane(halaman);
-        frame.pack();
-        frame.setResizable(false);
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-
-        javax.swing.SwingUtilities.getWindowAncestor(this).dispose();
+    frame.tampil("perbaruiStatus");
     }//GEN-LAST:event_BtnStatusActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed

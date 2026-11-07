@@ -625,8 +625,12 @@ public class DashboardDokter extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void btnRiwayatKunjunganActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRiwayatKunjunganActionPerformed
-        MainFrame frame = (MainFrame)javax.swing.SwingUtilities.getWindowAncestor(this);
-        frame.tampil("riwayatKunjungan");
+        MainFrame frame = (MainFrame)
+                javax.swing.SwingUtilities.getWindowAncestor(this);
+
+        if (frame != null) {
+            frame.tampilkanRiwayatKunjungan("dashboardDokter");
+        }
     }//GEN-LAST:event_btnRiwayatKunjunganActionPerformed
 
     private void btnRiwayatKunjunganMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRiwayatKunjunganMouseClicked
@@ -634,8 +638,13 @@ public class DashboardDokter extends javax.swing.JPanel {
     }//GEN-LAST:event_btnRiwayatKunjunganMouseClicked
 
     private void btnPerbaruiStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPerbaruiStatusActionPerformed
-        MainFrame frame = (MainFrame)javax.swing.SwingUtilities.getWindowAncestor(this);
-        frame.tampil("perbaruiStatus");
+        MainFrame frame = (MainFrame) javax.swing.SwingUtilities
+                .getWindowAncestor(this);
+
+        if (frame != null) {
+            frame.getPerbaruiStatus().setHalamanAsal("dashboardDokter");
+            frame.tampil("perbaruiStatus");
+        }
     }//GEN-LAST:event_btnPerbaruiStatusActionPerformed
 
     private void btnPerbaruiStatusMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPerbaruiStatusMouseClicked
@@ -652,10 +661,16 @@ public class DashboardDokter extends javax.swing.JPanel {
     }//GEN-LAST:event_btnAntreanDokterMouseClicked
 
     private void btnDashboardDokterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDashboardDokterActionPerformed
-        MainFrame frame = (MainFrame)
-        javax.swing.SwingUtilities.getWindowAncestor(this);
+    java.awt.Window window =
+            javax.swing.SwingUtilities.getWindowAncestor(this);
 
+    System.out.println("JENDELA AKTIF: " + window.getClass().getName());
+
+    if (window instanceof MainFrame frame) {
         frame.tampil("dashboardDokter");
+    } else {
+        System.out.println("ERROR: Bukan MainFrame!");
+    }
     }//GEN-LAST:event_btnDashboardDokterActionPerformed
 
     private void btnDashboardDokterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDashboardDokterMouseClicked

@@ -16,6 +16,12 @@ import javax.swing.table.DefaultTableModel;
  * @author ASUS
  */
 public class RiwayatKunjungan extends javax.swing.JPanel {
+    
+    private String halamanDashboardAsal = "dashboardPetugas";
+
+    public void setHalamanDashboardAsal(String halaman) {
+        halamanDashboardAsal = halaman;
+    }
 
     /**
      * Creates new form RiwayatKunjungan
@@ -88,11 +94,11 @@ public class RiwayatKunjungan extends javax.swing.JPanel {
         jPanel6 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jButton4 = new javax.swing.JButton();
+        btnDashboardPetugas = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
+        btnAntreanDokter = new javax.swing.JButton();
+        btnRiwayatKunjungan = new javax.swing.JButton();
+        btnPerbaruiStatus = new javax.swing.JButton();
         jPanel9 = new javax.swing.JPanel();
         namaPengguna = new javax.swing.JLabel();
         usernamePengguna = new javax.swing.JLabel();
@@ -136,59 +142,59 @@ public class RiwayatKunjungan extends javax.swing.JPanel {
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("PulseCare");
 
-        jButton4.setBackground(new java.awt.Color(20, 96, 108));
-        jButton4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jButton4.setForeground(new java.awt.Color(255, 255, 255));
-        jButton4.setText("Dashboard");
-        jButton4.setBorder(null);
-        jButton4.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jButton4.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnDashboardPetugas.setBackground(new java.awt.Color(20, 96, 108));
+        btnDashboardPetugas.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnDashboardPetugas.setForeground(new java.awt.Color(255, 255, 255));
+        btnDashboardPetugas.setText("Dashboard");
+        btnDashboardPetugas.setBorder(null);
+        btnDashboardPetugas.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        btnDashboardPetugas.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton4MouseClicked(evt);
+                btnDashboardPetugasMouseClicked(evt);
             }
         });
-        jButton4.addActionListener(this::jButton4ActionPerformed);
+        btnDashboardPetugas.addActionListener(this::btnDashboardPetugasActionPerformed);
 
         jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Logo PulseCare sedang tanpa tulisan.png"))); // NOI18N
 
-        jButton5.setBackground(new java.awt.Color(20, 96, 108));
-        jButton5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jButton5.setForeground(new java.awt.Color(255, 255, 255));
-        jButton5.setText("Antrean Dokter");
-        jButton5.setBorder(null);
-        jButton5.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jButton5.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnAntreanDokter.setBackground(new java.awt.Color(20, 96, 108));
+        btnAntreanDokter.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnAntreanDokter.setForeground(new java.awt.Color(255, 255, 255));
+        btnAntreanDokter.setText("Antrean Dokter");
+        btnAntreanDokter.setBorder(null);
+        btnAntreanDokter.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        btnAntreanDokter.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton5MouseClicked(evt);
+                btnAntreanDokterMouseClicked(evt);
             }
         });
-        jButton5.addActionListener(this::jButton5ActionPerformed);
+        btnAntreanDokter.addActionListener(this::btnAntreanDokterActionPerformed);
 
-        jButton6.setBackground(new java.awt.Color(186, 234, 242));
-        jButton6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jButton6.setForeground(new java.awt.Color(20, 96, 108));
-        jButton6.setText("Riwayat Kunjungan");
-        jButton6.setBorder(null);
-        jButton6.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jButton6.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnRiwayatKunjungan.setBackground(new java.awt.Color(186, 234, 242));
+        btnRiwayatKunjungan.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnRiwayatKunjungan.setForeground(new java.awt.Color(20, 96, 108));
+        btnRiwayatKunjungan.setText("Riwayat Kunjungan");
+        btnRiwayatKunjungan.setBorder(null);
+        btnRiwayatKunjungan.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        btnRiwayatKunjungan.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton6MouseClicked(evt);
+                btnRiwayatKunjunganMouseClicked(evt);
             }
         });
-        jButton6.addActionListener(this::jButton6ActionPerformed);
+        btnRiwayatKunjungan.addActionListener(this::btnRiwayatKunjunganActionPerformed);
 
-        jButton7.setBackground(new java.awt.Color(20, 96, 108));
-        jButton7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jButton7.setForeground(new java.awt.Color(255, 255, 255));
-        jButton7.setText("Perbarui Status");
-        jButton7.setBorder(null);
-        jButton7.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jButton7.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnPerbaruiStatus.setBackground(new java.awt.Color(20, 96, 108));
+        btnPerbaruiStatus.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnPerbaruiStatus.setForeground(new java.awt.Color(255, 255, 255));
+        btnPerbaruiStatus.setText("Perbarui Status");
+        btnPerbaruiStatus.setBorder(null);
+        btnPerbaruiStatus.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        btnPerbaruiStatus.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButton7MouseClicked(evt);
+                btnPerbaruiStatusMouseClicked(evt);
             }
         });
-        jButton7.addActionListener(this::jButton7ActionPerformed);
+        btnPerbaruiStatus.addActionListener(this::btnPerbaruiStatusActionPerformed);
 
         jPanel9.setBackground(new java.awt.Color(20, 96, 108));
         jPanel9.setPreferredSize(new java.awt.Dimension(0, 2));
@@ -237,10 +243,10 @@ public class RiwayatKunjungan extends javax.swing.JPanel {
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addGap(14, 14, 14)
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, 148, Short.MAX_VALUE)
-                            .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(btnAntreanDokter, javax.swing.GroupLayout.DEFAULT_SIZE, 148, Short.MAX_VALUE)
+                            .addComponent(btnDashboardPetugas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnPerbaruiStatus, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnRiwayatKunjungan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addGap(31, 31, 31)
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -261,13 +267,13 @@ public class RiwayatKunjungan extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
-                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnDashboardPetugas, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnAntreanDokter, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnPerbaruiStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(12, 12, 12)
-                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnRiwayatKunjungan, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, 8, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -395,39 +401,42 @@ public class RiwayatKunjungan extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton4MouseClicked
+    private void btnDashboardPetugasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDashboardPetugasMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4MouseClicked
+    }//GEN-LAST:event_btnDashboardPetugasMouseClicked
 
-    private void jButton5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton5MouseClicked
+    private void btnAntreanDokterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAntreanDokterMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton5MouseClicked
+    }//GEN-LAST:event_btnAntreanDokterMouseClicked
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        MainFrame frame = (MainFrame)
-        javax.swing.SwingUtilities.getWindowAncestor(this);
+    private void btnAntreanDokterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAntreanDokterActionPerformed
+    MainFrame frame = (MainFrame)
+            javax.swing.SwingUtilities.getWindowAncestor(this);
 
-        frame.tampil("antreanDokter");
-    }//GEN-LAST:event_jButton5ActionPerformed
+    frame.tampil("antreanDokter");
+    }//GEN-LAST:event_btnAntreanDokterActionPerformed
 
-    private void jButton6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton6MouseClicked
+    private void btnRiwayatKunjunganMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRiwayatKunjunganMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton6MouseClicked
+    }//GEN-LAST:event_btnRiwayatKunjunganMouseClicked
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+    private void btnRiwayatKunjunganActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRiwayatKunjunganActionPerformed
+    MainFrame frame = (MainFrame)
+            javax.swing.SwingUtilities.getWindowAncestor(this);
+
+    frame.tampil("riwayatKunjungan");
+    }//GEN-LAST:event_btnRiwayatKunjunganActionPerformed
+
+    private void btnPerbaruiStatusMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPerbaruiStatusMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton6ActionPerformed
+    }//GEN-LAST:event_btnPerbaruiStatusMouseClicked
 
-    private void jButton7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton7MouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton7MouseClicked
-
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+    private void btnPerbaruiStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPerbaruiStatusActionPerformed
         MainFrame frame = (MainFrame)
         javax.swing.SwingUtilities.getWindowAncestor(this);
 
         frame.tampil("perbaruiStatus");
-    }//GEN-LAST:event_jButton7ActionPerformed
+    }//GEN-LAST:event_btnPerbaruiStatusActionPerformed
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
@@ -437,20 +446,22 @@ public class RiwayatKunjungan extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField2ActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        MainFrame frame = (MainFrame)
-        javax.swing.SwingUtilities.getWindowAncestor(this);
+    private void btnDashboardPetugasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDashboardPetugasActionPerformed
+    MainFrame frame = (MainFrame)
+            javax.swing.SwingUtilities.getWindowAncestor(this);
 
-        frame.tampil("dashboardDokter");
-    }//GEN-LAST:event_jButton4ActionPerformed
+    if (frame != null) {
+        frame.tampil(halamanDashboardAsal);
+    }
+    }//GEN-LAST:event_btnDashboardPetugasActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAntreanDokter;
+    private javax.swing.JButton btnDashboardPetugas;
+    private javax.swing.JButton btnPerbaruiStatus;
+    private javax.swing.JButton btnRiwayatKunjungan;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;

@@ -140,6 +140,7 @@ public class DaftarkanKunjungan extends javax.swing.JPanel {
                 jButton4MouseClicked(evt);
             }
         });
+        jButton4.addActionListener(this::jButton4ActionPerformed);
 
         jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Logo PulseCare sedang tanpa tulisan.png"))); // NOI18N
 
@@ -560,7 +561,8 @@ public class DaftarkanKunjungan extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton5MouseClicked
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
+    MainFrame frame = (MainFrame)javax.swing.SwingUtilities.getWindowAncestor(this);
+    frame.tampil("daftarkanKunjungan");
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton6MouseClicked
@@ -568,7 +570,8 @@ public class DaftarkanKunjungan extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton6MouseClicked
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        // TODO add your handling code here:
+        MainFrame frame = (MainFrame)javax.swing.SwingUtilities.getWindowAncestor(this);
+        frame.tampil("riwayatKunjungan");
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton7MouseClicked
@@ -576,7 +579,8 @@ public class DaftarkanKunjungan extends javax.swing.JPanel {
     }//GEN-LAST:event_jButton7MouseClicked
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        // TODO add your handling code here:
+        MainFrame frame = (MainFrame)javax.swing.SwingUtilities.getWindowAncestor(this);
+        frame.tampil("perbaruiStatus");
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
@@ -661,8 +665,6 @@ public class DaftarkanKunjungan extends javax.swing.JPanel {
 
         form.setLocationRelativeTo(this);
         form.setVisible(true);
-
-        muatDataPasien();
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
@@ -670,8 +672,6 @@ public class DaftarkanKunjungan extends javax.swing.JPanel {
 
         form.setLocationRelativeTo(this);
         form.setVisible(true);
-
-        muatDataPasien();
     }//GEN-LAST:event_jButton9ActionPerformed
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
@@ -762,6 +762,11 @@ public class DaftarkanKunjungan extends javax.swing.JPanel {
         }
     
     }//GEN-LAST:event_jButton10ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        MainFrame frame = (MainFrame)javax.swing.SwingUtilities.getWindowAncestor(this);
+        frame.tampil("daftarkanKunjungan");
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     public void setInfoPetugas(String nipPetugas, String namaPetugas) {
         nipPetugasAktif = nipPetugas;
@@ -867,6 +872,7 @@ public class DaftarkanKunjungan extends javax.swing.JPanel {
     }
 
     void setInfoPetugas(String nip) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        nipPetugasAktif = nip;
+        usernamePetugas.setText(nip);
     }
 }
